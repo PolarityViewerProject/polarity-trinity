@@ -933,19 +933,22 @@ std::string LLGridManager::getPlatformString() const
 
 std::string LLGridManager::getUpdateServiceURL() const
 {
-	std::string update_url_base = gSavedSettings.getString("CmdLineUpdateService");;
-	if ( !update_url_base.empty() )
-	{
-		LL_INFOS("UpdaterService","GridManager")
-			<< "Update URL base overridden from command line: " << update_url_base
-			<< LL_ENDL;
-	}
-	else
-	{
-		update_url_base = PROJECT_UPDATE_SERVICE;
-	}
-			
-	return update_url_base;
+// <polarity> We don't like that idea.
+//	std::string update_url_base = gSavedSettings.getString("CmdLineUpdateService");;
+//	if ( !update_url_base.empty() )
+//	{
+//		LL_INFOS("UpdaterService","GridManager")
+//			<< "Update URL base overridden from command line: " << update_url_base
+//			<< LL_ENDL;
+//	}
+//	else
+//	{
+//		update_url_base = PROJECT_UPDATE_SERVICE;
+//	}
+//			
+//	return update_url_base;
+	return PROJECT_UPDATE_SERVICE;
+// </polarity>
 }
 
 LLSD LLGridManager::getGridInfo(const std::string& grid) const
