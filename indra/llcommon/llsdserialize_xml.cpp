@@ -33,6 +33,7 @@
 #include <iostream>
 #include <deque>
 
+#include <boost/type_traits.hpp>
 #include <boost/regex.hpp>
 
 extern "C"
