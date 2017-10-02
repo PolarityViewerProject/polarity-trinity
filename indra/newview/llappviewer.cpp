@@ -1321,6 +1321,7 @@ void LLAppViewer::checkMemory()
 static LLTrace::BlockTimerStatHandle FTM_MESSAGES("System Messages");
 static LLTrace::BlockTimerStatHandle FTM_SLEEP("Sleep");
 static LLTrace::BlockTimerStatHandle FTM_YIELD("Yield");
+static LLTrace::BlockTimerStatHandle FTM_FPSLIMIT("FPS Limiter");
 
 static LLTrace::BlockTimerStatHandle FTM_TEXTURE_CACHE("Texture Cache");
 static LLTrace::BlockTimerStatHandle FTM_DECODE("Image Decode");
@@ -1456,6 +1457,30 @@ bool LLAppViewer::frame()
 		pingMainloopTimeout("Main:Sleep");
 
 		pauseMainloopTimeout();
+
+		// <polarity> FPS Limiter.
+		// Only limit FPS when we are actually rendering something. Otherwise logins, logouts and teleports take much longer to complete.
+		if (LLStartUp::getStartupState() == STATE_STARTED
+				&& !gTeleportDisplay
+				&& !logoutRequestSent())
+		{
+			static LLCachedControl<bool> fps_limiter_enabled(gSavedSettings, "PolarityFrameLimiterEnabled", false);
+			if (fps_limiter_enabled)
+			{
+				// Sleep a while to limit frame rate.
+				static LLCachedControl<U32> fps_target(gSavedSettings, "PolarityFrameLimiterTarget", 60);
+				F32 min_frame_time = 1.000f / (F32)fps_target;
+				// Note: Setting the FPS target too low seems to cause severe issues
+				static const S32 MIN_FPS_LIMIT = 5;
+				S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.0), MIN_FPS_LIMIT, 1000);
+				if (milliseconds_to_sleep > MIN_FPS_LIMIT)
+				{
+					LL_RECORD_BLOCK_TIME(FTM_FPSLIMIT);
+					ms_sleep(milliseconds_to_sleep);
+				}
+			}
+		}
+		// </polarity> FPS Limiter
 
 		// Sleep and run background threads
 		{

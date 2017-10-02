@@ -5,6 +5,7 @@
     <key>Include</key>
     <array>
       <string>settings_alchemy.xml</string>
+      <string>settings_polarity.xml</string>
     </array>
   <key>ImporterDebug</key>
   <map>

@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="llsd.xsd">
+  <map>
+    <key>PolarityFrameLimiterEnabled</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable FPS Limiter </string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>PolarityFrameLimiterTarget</key>
+    <map>
+      <key>Comment</key>
+      <string>Target FPS for the Frame Limiter</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <real>60</real>
+    </map>
+  </map>
+</llsd>
