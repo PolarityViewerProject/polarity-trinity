@@ -286,7 +286,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>AlchemyChatSeconds</key>
     <map>
@@ -297,7 +297,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>AlchemyConnectToNeighbors</key>
     <map>
@@ -330,7 +330,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>AlchemyEnableKeyboardShout</key>
     <map>
@@ -605,7 +605,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>AlchemyNametagColorMgr</key>
     <map>
@@ -693,7 +693,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>AlchemyPlainChatNameBold</key>
     <map>
@@ -770,7 +770,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>AlchemyRadarAlerts</key>
       <map>
@@ -803,7 +803,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>AlchemyRecentPeopleMaxAge</key>
     <map>
@@ -935,7 +935,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>FindLandSort</key>
     <map>
@@ -1272,7 +1272,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
     <key>StreamList</key>
     <map>
