@@ -7171,7 +7171,7 @@ bool LLVOAvatar::isTooComplex() const
 	static LLCachedControl <bool> always_render_friends(gSavedSettings, "AlwaysRenderFriends");
 	bool render_friend =  (always_render_friends && LLAvatarTracker::instance().isBuddy(getID()));
 
-	if (isSelf() || render_friend || mVisuallyMuteSetting == AV_ALWAYS_RENDER)
+	if (/*isSelf() || */ render_friend || mVisuallyMuteSetting == AV_ALWAYS_RENDER)
 	{
 		too_complex = false;
 	}
