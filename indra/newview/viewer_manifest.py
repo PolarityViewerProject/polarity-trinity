@@ -101,13 +101,6 @@ class ViewerManifest(LLManifest):
             contributor_names = self.extract_names(contributions_path)
             self.put_in_file(contributor_names, "contributors.txt", src=contributions_path)
 
-            # include the extracted list of special thanks
-            special_thanks_path = "../../doc/polarity_credits.txt"
-            special_thanks_names = self.extract_names(special_thanks_path)
-            self.put_in_file(special_thanks_names, "polarity_credits.txt", src=special_thanks_path)
-
-            # TODO: Add changelog?
-
             # ... and the entire windlight directory
             self.path("windlight")
 
