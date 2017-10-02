@@ -291,13 +291,13 @@ class WindowsManifest(ViewerManifest):
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         if self.is_packaging_viewer():
-            # Find alchemy-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
-            self.path(src='%s/alchemy-bin.exe' % self.args['configuration'], dst=self.final_exe())
+            # Find polarity-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
+            self.path(src='%s/polarity-bin.exe' % self.args['configuration'], dst=self.final_exe())
 
         # Plugin host application
         self.path2basename(os.path.join(os.pardir,
                                         'llplugin', 'slplugin', self.args['configuration']),
-                           "AlchemyPlugin.exe")
+                           "PolarityPlugin.exe")
 
         self.path2basename("../viewer_components/updater/scripts/windows", "update_install.bat")
         # Get shared libs from the shared libs staging directory
@@ -549,7 +549,7 @@ class WindowsManifest(ViewerManifest):
         if 'signature' in self.args and 'VIEWER_SIGNING_PWD' in os.environ:
             try:
                 self.sign(self.args['configuration']+"\\"+self.final_exe())
-                self.sign(self.args['configuration']+"\\AlchemyPlugin.exe")
+                self.sign(self.args['configuration']+"\\PolarityPlugin.exe")
                 self.sign(self.args['configuration']+"\\SLVoice.exe")
             except:
                 print "Couldn't sign binaries. Tried to sign %s" % self.args['configuration'] + "\\" + self.final_exe()
@@ -573,20 +573,21 @@ class WindowsManifest(ViewerManifest):
         else:
             substitution_strings['caption'] = self.app_name() + ' ${VERSION}'
 
-        inst_vars_template = """
-            !define INSTOUTFILE "%(installer_file)s"
-            !define INSTEXE  "%(final_exe)s"
-            !define APPNAME   "%(app_name)s"
-            !define APPNAMEONEWORD   "%(app_name_oneword)s"
-            !define VERSION "%(version_short)s"
-            !define VERSION_LONG "%(version)s"
-            !define VERSION_DASHES "%(version_dashes)s"
-            !define URLNAME   "secondlife"
-            !define CAPTIONSTR "%(caption)s"
-            !define VENDORSTR "Alchemy Viewer Project"
-            """
+            inst_vars_template = """
+                !define INSTOUTFILE "%(installer_file)s"
+                !define INSTEXE "%(final_exe)s"
+                !define APPNAME   "%(app_name)s"
+                !define APPNAMEONEWORD   "%(app_name_oneword)s"
+                !define CHANNEL "%(channel)s"
+                !define VERSION "%(version_short)s"
+                !define VERSION_LONG "%(version)s"
+                !define VERSION_DASHES "%(version_dashes)s"
+                !define URLNAME  "secondlife"
+                !define CAPTIONSTR "%(caption)s"
+                !define VENDORSTR "Polarity Viewer Project"
+                """
 
-        tempfile = "alchemy_setup_tmp.nsi"
+        tempfile = "polarity_setup_tmp.nsi"
         # the following replaces strings in the nsi template
         # it also does python-style % substitution
         self.replace_in("installers/windows/installer_template.nsi", tempfile, {
@@ -694,7 +695,7 @@ class DarwinManifest(ViewerManifest):
 
     def construct(self):
         # copy over the build result (this is a no-op if run within the xcode script)
-        self.path(self.args['configuration'] + "/Alchemy.app", dst="")
+        self.path(self.args['configuration'] + "/Polarity.app", dst="")
 
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         relpkgdir = os.path.join(pkgdir, "lib", "release")
@@ -722,10 +723,10 @@ class DarwinManifest(ViewerManifest):
 
                 icon_path = self.icon_path()
                 if self.prefix(src=icon_path, dst="") :
-                    self.path("alchemy.icns")
+                    self.path("polarity.icns")
                     self.end_prefix(icon_path)
 
-                self.path("Alchemy.nib")
+                self.path("Polarity.nib")
 
                 # Translations
                 self.path("English.lproj/language.txt")
@@ -815,7 +816,7 @@ class DarwinManifest(ViewerManifest):
                 # our apps
                 for app_bld_dir, app in (("mac_crash_logger", "mac-crash-logger.app"),
                                          # plugin launcher
-                                         (os.path.join("llplugin", "slplugin"), "AlchemyPlugin.app"),
+                                         (os.path.join("llplugin", "slplugin"), "PolarityPlugin.app"),
                                          ):
                     self.path2basename(os.path.join(os.pardir,
                                                     app_bld_dir, self.args['configuration']),
@@ -833,8 +834,8 @@ class DarwinManifest(ViewerManifest):
                         except OSError as err:
                             print "Can't symlink %s -> %s: %s" % (src, dst, err)
 
-                # LLCefLib helper apps go inside AlchemyPlugin.app
-                if self.prefix(src="", dst="AlchemyPlugin.app/Contents/Frameworks"):
+                # LLCefLib helper apps go inside PolarityPlugin.app
+                if self.prefix(src="", dst="PolarityPlugin.app/Contents/Frameworks"):
                     for helperappfile in ('LLCefLib Helper.app',
                                           'LLCefLib Helper EH.app'):
                         self.path2basename(relpkgdir, helperappfile)
@@ -865,9 +866,9 @@ class DarwinManifest(ViewerManifest):
                 # to terminate the process if we get an error since without
                 # this symlink, Second Life web media can't possibly work.
                 # Real Framework folder:
-                #   Second Life.app/Contents/Frameworks/Chromium Embedded Framework.framework/
-                # Location of symlink and why it'ds relavie 
-                #   Second Life.app/Contents/Resources/AlchemyPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/
+                #   Polarity.app/Contents/Frameworks/Chromium Embedded Framework.framework/
+                # Location of symlink and why it'ds relative 
+                #   Polarity.app/Contents/Resources/PolarityPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/
                 frameworkpath = os.path.join(os.pardir, os.pardir, os.pardir, os.pardir, "Frameworks", "Chromium Embedded Framework.framework")
                 try:
                     symlinkf(frameworkpath, pluginframeworkpath)
@@ -884,7 +885,7 @@ class DarwinManifest(ViewerManifest):
         if ("package" in self.args['actions'] or
             "unpacked" in self.args['actions']):
             self.run_command('strip -S %(viewer_binary)r' %
-                             { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Alchemy')})
+                             { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Polarity')})
 
     def copy_finish(self):
         # Force executable permissions to be set for scripts
@@ -1013,7 +1014,7 @@ class DarwinManifest(ViewerManifest):
                                 raise
                     self.run_command('spctl -a -texec -vv %(bundle)r' % { 'bundle': app_in_dmg })
 
-            imagename="Alchemy_" + '_'.join(self.args['version'])
+            imagename="Polarity_" + '_'.join(self.args['version'])
 
 
         finally:
@@ -1055,7 +1056,7 @@ class LinuxManifest(ViewerManifest):
             self.path("client-readme.txt","README-linux.txt")
             self.path("client-readme-voice.txt","README-linux-voice.txt")
             self.path("client-readme-joystick.txt","README-linux-joystick.txt")
-            self.path("wrapper.sh","alchemy")
+            self.path("wrapper.sh","polarity")
             if self.prefix(src="", dst="etc"):
                 self.path("handle_secondlifeprotocol.sh")
                 self.path("register_secondlifeprotocol.sh")
@@ -1066,9 +1067,9 @@ class LinuxManifest(ViewerManifest):
             self.end_prefix("linux_tools")
 
         if self.prefix(src="", dst="bin"):
-            self.path("alchemy-bin","do-not-directly-run-alchemy-bin")
+            self.path("polarity-bin","do-not-directly-run-polarity-bin")
             self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
-            self.path2basename("../llplugin/slplugin", "AlchemyPlugin")
+            self.path2basename("../llplugin/slplugin", "PolarityPlugin")
             self.path2basename("../viewer_components/updater/scripts/linux", "update_install")
             self.end_prefix("bin")
 
@@ -1081,9 +1082,9 @@ class LinuxManifest(ViewerManifest):
         icon_path = self.icon_path()
         print "DEBUG: icon_path '%s'" % icon_path
         if self.prefix(src=icon_path, dst="") :
-            self.path("alchemy_256.png","alchemy_icon.png")
+            self.path("polarity_256.png","polarity_icon.png")
             if self.prefix(src="",dst="res-sdl") :
-                self.path("alchemy_256.BMP","ll_icon.BMP")
+                self.path("polarity_256.BMP","ll_icon.BMP")
                 self.end_prefix("res-sdl")
             self.end_prefix(icon_path)
 
@@ -1185,7 +1186,7 @@ class LinuxManifest(ViewerManifest):
     def copy_finish(self):
         # Force executable permissions to be set for scripts
         # see CHOP-223 and http://mercurial.selenic.com/bts/issue1802
-        for script in 'alchemy', 'bin/update_install':
+        for script in 'polarity', 'bin/update_install':
             self.run_command("chmod +x %r" % os.path.join(self.get_dst_prefix(), script))
 
     def package_finish(self):

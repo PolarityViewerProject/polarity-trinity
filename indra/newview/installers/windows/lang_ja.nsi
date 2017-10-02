@@ -18,7 +18,7 @@ LangString CheckStartupParamsMB ${LANG_JAPANESE} "プログラム名'$INSTPROG'�
 ; check windows version
 LangString CheckWindowsVersionDP ${LANG_JAPANESE} "ウィンドウズのバージョン情報をチェック中です..." 
 LangString CheckWindowsVersionMB ${LANG_JAPANESE} "Second Life はWindows XPのみをサポートしています。Windows $R0をインストールする事は、データの消失やクラッシュの原因になる可能性があります。インストールを続けますか？" 
-LangString CheckWindowsServPackMB ${LANG_JAPANESE} "It is recomended to run Firestorm on the latest service pack for your operating system.$\nThis will help with performance and stability of the program."
+LangString CheckWindowsServPackMB ${LANG_JAPANESE} "It is recomended to run ${APPNAME} on the latest service pack for your operating system.$\nThis will help with performance and stability of the program."
 LangString UseLatestServPackDP ${LANG_JAPANESE} "Please use Windows Update to install the latest Service Pack."
 
 ; checkifadministrator function (install)

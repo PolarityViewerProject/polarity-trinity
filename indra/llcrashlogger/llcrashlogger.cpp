@@ -87,7 +87,7 @@ LLCrashLogger::LLCrashLogger() :
 	mCrashBehavior(CRASH_BEHAVIOR_ALWAYS_SEND),
 	mCrashInPreviousExec(false),
 	mCrashSettings("CrashSettings"),
-	mCrashHost("https://app.alchemyviewer.org/report/"),
+	mCrashHost("https://www.polarityviewer.org/report/"),
 	mSentCrashLogs(false)
 {
 }
@@ -253,13 +253,13 @@ void LLCrashLogger::gatherFiles()
         LLCore::HttpRequest::setStaticPolicyOption(LLCore::HttpRequest::PO_CA_FILE,
             LLCore::HttpRequest::GLOBAL_POLICY_ID, gDirUtilp->getCAFile(), nullptr);
         
-		mFileMap["SecondLifeLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"Alchemy.log");
+		mFileMap["SecondLifeLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"Polarity.log");
         mFileMap["SettingsXml"] = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,"settings.xml");
 	}
 
     if (!gDirUtilp->fileExists(mFileMap["SecondLifeLog"]) ) //We would prefer to get this from the per-run but here's our fallback.
     {
-        mFileMap["SecondLifeLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"Alchemy.old");
+        mFileMap["SecondLifeLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"Polarity.old");
     }
 
 	gatherPlatformSpecificFiles();
@@ -454,7 +454,7 @@ bool LLCrashLogger::sendCrashLog(std::string dump_dir)
     gDirUtilp->setDumpDir( dump_dir );
     
     std::string dump_path = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-                                                           "AlchemyCrashReport");
+                                                           "PolarityCrashReport");
     std::string report_file = dump_path + ".log";
 
     LL_DEBUGS("CRASHREPORT") << "sending " << report_file << LL_ENDL;
@@ -568,12 +568,12 @@ bool LLCrashLogger::init()
     LLCore::LLHttp::initialize();
 
 	// We assume that all the logs we're looking for reside on the current drive
-	gDirUtilp->initAppDirs("Alchemy");
+	gDirUtilp->initAppDirs("Polarity");
 
 	LLError::initForApplication(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
 
 	// Default to the product name "Second Life" (this is overridden by the -name argument)
-	mProductName = "Alchemy";
+	mProductName = "Polarity";
 
 	// Rename current log file to ".old"
 	std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "crashreport.log.old");

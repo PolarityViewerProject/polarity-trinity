@@ -82,7 +82,7 @@ const std::string GRID_SLURL_BASE = "slurl_base";
 /// slurl base for grid slapp links
 const std::string GRID_APP_SLURL_BASE = "app_slurl_base";
 
-const std::string DEFAULT_LOGIN_PAGE = "https://login.alchemyviewer.org/";
+const std::string DEFAULT_LOGIN_PAGE = "http://app.polarityviewer.org/";
 
 const std::string MAIN_GRID_LOGIN_URI = "https://login.agni.lindenlab.com/cgi-bin/login.cgi";
 
@@ -97,7 +97,7 @@ const char* SYSTEM_GRID_SLURL_BASE = "secondlife://%s/secondlife/";
 const char* DEFAULT_SLURL_BASE = "x-grid-info://%s/region/";
 const char* DEFAULT_APP_SLURL_BASE = "x-grid-info://%s/app";
 
-const std::string ALCHEMY_UPDATE_SERVICE = "https://app.alchemyviewer.org/update";
+const std::string PROJECT_UPDATE_SERVICE = "https://update.polarityviewer.org/update";
 
 //
 const std::string GRIDS_USER_FILE = "grids_user.xml";
@@ -147,7 +147,7 @@ void LLGridManager::initialize(const std::string& grid_file)
 				  "https://secondlife.com/helpers/",
 				  DEFAULT_LOGIN_PAGE,
 				  "https://secondlife.com/my/account/request.php",
-				  "https://join.secondlife.com/?sourceid=AlchemyViewer",
+				  "https://join.secondlife.com/?sourceid=PolarityViewer",
 				  SL_UPDATE_QUERY_URL,
 				  MAIN_GRID_WEB_PROFILE_URL,
 				  "Linden Lab",
@@ -159,7 +159,7 @@ void LLGridManager::initialize(const std::string& grid_file)
 				  "http://aditi-secondlife.webdev.lindenlab.com/helpers/",
 				  DEFAULT_LOGIN_PAGE,
 				  "https://secondlife.com/my/account/request.php",
-				  "https://join.secondlife.com/?sourceid=AlchemyViewer",
+				  "https://join.secondlife.com/?sourceid=PolarityViewer",
 				  SL_UPDATE_QUERY_URL,
 				  "https://my.aditi.lindenlab.com/",
 				  "Linden Lab",
@@ -942,7 +942,7 @@ std::string LLGridManager::getUpdateServiceURL() const
 	}
 	else
 	{
-		update_url_base = ALCHEMY_UPDATE_SERVICE;
+		update_url_base = PROJECT_UPDATE_SERVICE;
 	}
 			
 	return update_url_base;

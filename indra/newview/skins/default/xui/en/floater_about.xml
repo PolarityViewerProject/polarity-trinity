@@ -130,7 +130,7 @@ Voice chat Audio coding: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
       </panel>
     <panel
       border="true" 
-      label="Alchemy Credits" 
+      label="Polarity Credits" 
       help_topic="about_alchemy_credits_tab"
       name="alchemy_credits_panel">
       <text
@@ -142,7 +142,7 @@ Voice chat Audio coding: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
           top="10"
           width="435"
           wrap="true">
-Alchemy Viewer is brought to you by the Alchemy Development Group:
+Polarity Viewer is brought to you by the Polarity Viewer Team:
       </text>
       <text_editor
        enabled="false" 
@@ -155,7 +155,7 @@ Alchemy Viewer is brought to you by the Alchemy Development Group:
        top_pad="10"
        width="435"
        word_wrap="true">
-Sovereign Engineer, Cinder Roxley, Inusaito Kanya, Luminous Luminos, Electron Electricteeth
+ Xenhat Liamano, TheDarkest Fairey, Doug Falta
       </text_editor>
       <text
           follows="top|left"
@@ -179,7 +179,7 @@ with open source code from:
        top_pad="12"
        width="435"
        word_wrap="true">
-Siana Gearz, Shyotl Kuhr, Xenhat Liamano, NiranV Dean, Qarl Fizz, TheDarkest Fairey, Tofu Buzzard, Ansariel Hiller, Kitty Barnett, Ayamo Nozaki 
+Siana Gearz, Shyotl Kuhr, NiranV Dean, Qarl Fizz, , Tofu Buzzard, Ansariel Hiller, Kitty Barnett, Ayamo Nozaki, Sovereign Engineer, Cinder Roxley, Inusaito Kanya, Luminous Luminos, Electron Electricteeth
       </text_editor>
       <text
           follows="top|left"

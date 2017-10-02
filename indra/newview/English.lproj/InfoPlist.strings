@@ -1,7 +1,7 @@
 /* Localized versions of Info.plist keys */
 
-CFBundleName = "Alchemy";
+CFBundleName = "Polarity Viewer";
 
-CFBundleShortVersionString = "Alchemy version %%VERSION%%";
-CFBundleGetInfoString = "Alchemy version %%VERSION%%, Copyright © 2013-2017 Alchemy Viewer Project";
+CFBundleShortVersionString = "Polarity Viewer version %%VERSION%%";
+CFBundleGetInfoString = "Polarity Viewer version %%VERSION%%, Copyright 2014-2017, Polarity Viewer Project";
 

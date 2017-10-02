@@ -1,7 +1,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; secondlife setup.nsi
-;; Copyright 2004-2011, Linden Research, Inc.
-;; Copyright 2013-2015 Alchemy Viewer Project
+;; Copyright 2004-2017, Linden Research, Inc.
+;; Copyright 2013-2017 Alchemy Viewer Project
+;; Copyright 2014-2017 Polarity Viewer Project
 ;;
 ;; This library is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU Lesser General Public
@@ -22,11 +23,11 @@
 ;; NSIS Unicode 2.46.5 or higher required
 ;; http://www.scratchpaper.com/
 ;;
-;; Author: James Cook, Don Kjer, Callum Prentice, Drake Arconis
+;; Author: James Cook, Don Kjer, Callum Prentice, Drake Arconis, Xenhat Liamano
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;--------------------------------
 ;Unicode
-  Unicode true
+  ; Unicode true
 
 ;--------------------------------
 ;Include Modern UI
@@ -53,8 +54,9 @@
   Var OLDINSTALL
   Var COMMANDLINE         ; command line passed to this installer, set in .onInit
   Var SHORTCUT_LANG_PARAM ; "--set InstallLanguage de", passes language to viewer
-  Var SKIP_DIALOGS        ; set from command line in  .onInit. autoinstall 
+  Var SKIP_DIALOGS        ; set from command line in  .onInit. autoinstall
                           ; GUI and the defaults.
+  Var SKIP_AUTORUN		    ; skip automatic launch of viewer after install
   Var STARTMENUFOLDER
 
 ;--------------------------------
@@ -68,9 +70,9 @@
 
   ;Default installation folder
 !ifdef WIN64_BIN_BUILD
-  InstallDir "$PROGRAMFILES64\${APPNAMEONEWORD}"
+  InstallDir "$PROGRAMFILES64\${APPNAME}"
 !else
-  InstallDir "$PROGRAMFILES\${APPNAMEONEWORD}"
+  InstallDir "$PROGRAMFILES\${APPNAME}"
 !endif
 
   ;Get installation folder from registry if available and 32bit otherwise do it in init
@@ -92,10 +94,10 @@
 ;Version Information
 
   VIProductVersion "${VERSION_LONG}"
-  VIAddVersionKey "ProductName" "Alchemy Viewer"
-  VIAddVersionKey "Comments" "A viewer for the meta-verse!"
-  VIAddVersionKey "CompanyName" "Alchemy Viewer Project"
-  VIAddVersionKey "LegalCopyright" "Copyright © 2013-2015, Alchemy Viewer Project"
+  VIAddVersionKey "ProductName" "Polarity Viewer"
+  VIAddVersionKey "Comments" "A Second Life protocol-compatible client"
+  VIAddVersionKey "CompanyName" "Polarity Viewer Project"
+  VIAddVersionKey "LegalCopyright" "Copyright © 2014-2017, Polarity Viewer Project"
   VIAddVersionKey "FileDescription" "${APPNAME} Installer"
   VIAddVersionKey "ProductVersion" "${VERSION_LONG}"
 
@@ -106,9 +108,9 @@
   ShowInstDetails hide
   ShowUninstDetails hide
 
-  !define MUI_ICON "%%SOURCE%%\installers\windows\install_icon.ico"
+  !define MUI_ICON "%%SOURCE%%\res\ll_icon.ico"
   !define MUI_UNICON "%%SOURCE%%\installers\windows\uninstall_icon.ico"
-  !define MUI_WELCOMEFINISHPAGE_BITMAP "%%SOURCE%%\installers\windows\install_welcome.bmp"
+  !define MUI_WELCOMEFINISHPAGE_BITMAP "%%SOURCE%%\installers\windows\install_welcome_${CHANNEL}.bmp"
   !define MUI_UNWELCOMEFINISHPAGE_BITMAP "%%SOURCE%%\installers\windows\uninstall_welcome.bmp"
   !define MUI_ABORTWARNING
 
@@ -153,6 +155,11 @@
 
   ; Finish Page
   !define MUI_PAGE_CUSTOMFUNCTION_PRE check_skip_finish
+  ; hack the "Show readme" existing variable because modifying MUI templates is incredibly hard
+  !define MUI_FINISHPAGE_SHOWREADME
+  !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
+  !define MUI_FINISHPAGE_SHOWREADME_TEXT "Create Desktop Shortcut"
+  !define MUI_FINISHPAGE_SHOWREADME_FUNCTION CreateDesktopShortcut
   !define MUI_FINISHPAGE_RUN
   !define MUI_FINISHPAGE_RUN_FUNCTION launch_viewer
   !define MUI_FINISHPAGE_NOREBOOTSUPPORT
@@ -171,16 +178,16 @@
 
   !include "%%SOURCE%%\installers\windows\lang_en-us.nsi"
   !include "%%SOURCE%%\installers\windows\lang_fr.nsi"
-  !include "%%SOURCE%%\installers\windows\lang_de.nsi"
-  !include "%%SOURCE%%\installers\windows\lang_es.nsi"
-  !include "%%SOURCE%%\installers\windows\lang_zh.nsi"
-  !include "%%SOURCE%%\installers\windows\lang_ja.nsi"
-  !include "%%SOURCE%%\installers\windows\lang_pl.nsi"
-  !include "%%SOURCE%%\installers\windows\lang_it.nsi"
-  !include "%%SOURCE%%\installers\windows\lang_pt-br.nsi"
-  !include "%%SOURCE%%\installers\windows\lang_da.nsi"
-  !include "%%SOURCE%%\installers\windows\lang_ru.nsi"
-  !include "%%SOURCE%%\installers\windows\lang_tr.nsi"
+  ; !include "%%SOURCE%%\installers\windows\lang_de.nsi"
+  ; !include "%%SOURCE%%\installers\windows\lang_es.nsi"
+  ; !include "%%SOURCE%%\installers\windows\lang_zh.nsi"
+  ; !include "%%SOURCE%%\installers\windows\lang_ja.nsi"
+  ; !include "%%SOURCE%%\installers\windows\lang_pl.nsi"
+  ; !include "%%SOURCE%%\installers\windows\lang_it.nsi"
+  ; !include "%%SOURCE%%\installers\windows\lang_pt-br.nsi"
+  ; !include "%%SOURCE%%\installers\windows\lang_da.nsi"
+  ; !include "%%SOURCE%%\installers\windows\lang_ru.nsi"
+  ; !include "%%SOURCE%%\installers\windows\lang_tr.nsi"
 
 ;--------------------------------
 ;Reserve Files
@@ -190,12 +197,12 @@
   ;because this will make your installer start faster.
   
   !insertmacro MUI_RESERVEFILE_LANGDLL
-  ReserveFile "${NSISDIR}\Plugins\x86-unicode\NSISdl.dll"
-  ReserveFile "${NSISDIR}\Plugins\x86-unicode\nsDialogs.dll"
-  ReserveFile "${NSISDIR}\Plugins\x86-unicode\StartMenu.dll"
-  ReserveFile "${NSISDIR}\Plugins\x86-unicode\StdUtils.dll"
-  ReserveFile "${NSISDIR}\Plugins\x86-unicode\System.dll"
-  ReserveFile "${NSISDIR}\Plugins\x86-unicode\UserInfo.dll"
+  ReserveFile "${NSISDIR}\Plugins\NSISdl.dll"
+  ReserveFile "${NSISDIR}\Plugins\nsDialogs.dll"
+  ReserveFile "${NSISDIR}\Plugins\StartMenu.dll"
+  ReserveFile "${NSISDIR}\Plugins\StdUtils.dll"
+  ReserveFile "${NSISDIR}\Plugins\System.dll"
+  ReserveFile "${NSISDIR}\Plugins\UserInfo.dll"
 
 ;--------------------------------
 ; Local Functions
@@ -281,8 +288,21 @@ Function CheckCPUFlags
   Quit
 
   OK_SSE2:
-  Pop $1
-  Return
+    Pop $1
+    Return
+FunctionEnd
+
+;SSE3
+Function CheckSSE3
+    Push $1
+    System::Call 'kernel32::IsProcessorFeaturePresent(i) i(13) .r1'
+    IntCmp $1 1 OK_SSE3
+    MessageBox MB_OKCANCEL $(MissingSSE3) /SD IDOK IDOK OK_SSE3
+    Quit
+
+  OK_SSE3:
+    Pop $1
+    Return
 FunctionEnd
 
 ;Checks if installed version is same as installer and offers to cancel
@@ -300,16 +320,15 @@ continue_install:
   Pop $0
   Return
 FunctionEnd
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Close the program, if running. Modifies no variables.
 ; Allows user to bail out of install process.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CloseSecondLife
   Push $0
-  FindWindow $0 "Alchemy" ""
+  FindWindow $0 "Polarity" ""
   IntCmp $0 0 DONE
-  
+
   StrCmp $SKIP_DIALOGS "true" CLOSE
     MessageBox MB_OKCANCEL $(CloseSecondLifeInstMB) IDOK CLOSE IDCANCEL CANCEL_INSTALL
 
@@ -321,7 +340,7 @@ Function CloseSecondLife
     SendMessage $0 16 0 0
 
   LOOP:
-	FindWindow $0 "Alchemy" ""
+	FindWindow $0 "Polarity" ""
 	IntCmp $0 0 DONE
 	Sleep 500
 	Goto LOOP
@@ -337,7 +356,7 @@ FunctionEnd
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function un.CloseSecondLife
   Push $0
-  FindWindow $0 "Alchemy" ""
+  FindWindow $0 "Polarity" ""
   IntCmp $0 0 DONE
   MessageBox MB_OKCANCEL $(CloseSecondLifeUnInstMB) IDOK CLOSE IDCANCEL CANCEL_UNINSTALL
 
@@ -349,7 +368,7 @@ Function un.CloseSecondLife
     SendMessage $0 16 0 0
 
   LOOP:
-    FindWindow $0 "Alchemy" ""
+    FindWindow $0 "Polarity" ""
     IntCmp $0 0 DONE
     Sleep 500
     Goto LOOP
@@ -469,6 +488,7 @@ Section "Viewer"
 
   ;Other shortcuts
   SetOutPath "$INSTDIR"
+  ; moved to a function hooked to a checkbox
   ;CreateShortCut "$DESKTOP\$INSTSHORTCUT.lnk" "$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM"
   CreateShortCut "$INSTDIR\$INSTSHORTCUT.lnk" "$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM"
   CreateShortCut "$INSTDIR\Uninstall $INSTSHORTCUT.lnk" "$INSTDIR\uninst.exe" ""
@@ -488,12 +508,12 @@ Section "Viewer"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayVersion" "${VERSION_LONG}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "InstallSource" "$EXEDIR\"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "HelpLink" "https://www.alchemyviewer.org"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "HelpLink" "https://www.polarityviewer.org"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "NoRepair" 1
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "Publisher" "${VENDORSTR}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLInfoAbout" "https://www.alchemyviewer.org"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLUpdateInfo" "https://www.alchemyviewer.org/p/downloads.html"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLInfoAbout" "https://www.polarityviewer.org"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLUpdateInfo" "https://www.polarityviewer.org/download/"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "UninstallString" "$\"$INSTDIR\uninst.exe$\""
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "QuietUninstallString" "$\"$INSTDIR\uninst.exe$\" /S"
   ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
@@ -538,14 +558,14 @@ Function .onInit
   Call CheckIfAdministrator
   ;Don't install if we lack required cpu support
   Call CheckCPUFlags
-
+  Call CheckSSE3
   Push $0
 
   ;Get installation folder from registry if available for 64bit
 !ifdef WIN64_BIN_BUILD
   SetRegView 64
   ReadRegStr $0 HKLM "SOFTWARE\${VENDORSTR}\${APPNAMEONEWORD}" ""
-  IfErrors +2 0 ; If error jump past setting the instdir from registry
+  IfErrors +2 0 ; If error jump past setting SKIP_AUTORUN
   StrCpy $INSTDIR $0
 !endif
 
@@ -554,6 +574,10 @@ Function .onInit
   ${GetOptions} $COMMANDLINE "/SKIP_DIALOGS" $0   
   IfErrors +2 0 ; If error jump past setting SKIP_DIALOGS
   StrCpy $SKIP_DIALOGS "true"
+
+  ${GetOptions} $COMMANDLINE "/SKIP_AUTORUN" $0
+  IfErrors +2 0 ; If error jump past setting SKIP_AUTORUN
+  StrCpy $SKIP_AUTORUN "true"
 
   ${GetOptions} $COMMANDLINE "/AUTOSTART" $0
   IfErrors +2 0 ; If error jump past setting AUTOSTART
@@ -586,6 +610,11 @@ lbl_return:
   Return
 FunctionEnd
 
+Function CreateDesktopShortcut
+  SetOutPath "$INSTDIR"
+  CreateShortCut "$DESKTOP\$INSTSHORTCUT.lnk" "$INSTDIR\$INSTEXE" "$SHORTCUT_LANG_PARAM"
+FunctionEnd
+
 ;--------------------------------
 ;Uninstaller Section
 
@@ -615,6 +644,9 @@ Section "Uninstall"
   ;Shortcuts in install directory
   Delete "$INSTDIR\$INSTSHORTCUT.lnk"
   Delete "$INSTDIR\Uninstall $INSTSHORTCUT.lnk"
+
+  ;Desktop shortcut
+  Delete "$DESKTOP\$INSTSHORTCUT.lnk"
 
   Delete "$INSTDIR\uninst.exe"
   RMDir "$INSTDIR"

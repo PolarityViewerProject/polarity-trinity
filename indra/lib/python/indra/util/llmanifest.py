@@ -85,7 +85,7 @@ def get_default_platform(dummy):
             }[sys.platform]
 
 DEFAULT_SRCTREE = os.path.dirname(sys.argv[0])
-CHANNEL_VENDOR_BASE = 'Alchemy'
+CHANNEL_VENDOR_BASE = 'Polarity'
 RELEASE_CHANNEL = CHANNEL_VENDOR_BASE + ' Release'
 
 ARGUMENTS=[

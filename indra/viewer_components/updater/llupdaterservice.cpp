@@ -57,7 +57,7 @@ namespace
 {
 	std::weak_ptr<LLUpdaterServiceImpl> gUpdater;
 
-	const std::string UPDATE_MARKER_FILENAME("AlchemyUpdateReady.xml");
+	const std::string UPDATE_MARKER_FILENAME("PolarityUpdateReady.xml");
 	std::string update_marker_path()
 	{
 		return gDirUtilp->getExpandedFilename(LL_PATH_LOGS, 
@@ -510,7 +510,7 @@ void LLUpdaterServiceImpl::downloadComplete(LLSD const & data)
 { 
 	mIsDownloading = false;
 
-	// Save out the download data to the AlchemyUpdateReady
+	// Save out the download data to the PolarityUpdateReady
 	// marker file. 
 	llofstream update_marker(update_marker_path().c_str());
 	LLSDSerialize::toPrettyXML(data, update_marker);

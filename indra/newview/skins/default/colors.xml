@@ -1,5 +1,98 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <colors>
+    <color
+     name="AlBlue"
+     value="0 0.631 0.874 1" />
+    <color
+     name="AlDarkBlue"
+     value="0 0.29 0.533 1" />
+    <color
+     name="AlCoalBlack"
+     value="0.145 0.157 0.165 1" />
+    <color
+     name="AlAshGrey"
+     value="0.329 0.341 0.353 1" />
+    <color
+     name="AlSilverGrey"
+     value="0.624 0.635 0.639 1" />
+    <color
+     name="AlCoralRed"
+     value="0.98 0.212 0.29 1" />
+    <color
+     name="AlScarlet"
+     value="0.694 0.125 0.161 1" />
+    <color
+     name="AlPurpleDrank"
+     value="0.239 0.067 0.322 1" />
+    <color
+     name="AlGrape"
+     value="0.361 0.059 0.549 1" />
+    <color
+     name="AlPrimaryBlue"
+     value="0 0.29 0.533 1" />
+    <color
+     name="AlWarningOrange"
+     value="0.824 0.373 0.082 1" />
+    <color
+     name="AlDangerRed"
+     value="0.694 0.125 0.161 1" />
+    <color
+     name="AlInformationBlue"
+     value="0 0.631 0.878 1" />
+    <color
+     name="AlSuccessGreen"
+     value="0.42 0.753 0.294 1" />
+    <color
+     name="AlUrgentInfoYellow"
+     value="0.957 0.745 0.286 1" />
+    <color
+     name="AlMiscPurple"
+     value="0.361 0.059 0.549 1" />
+    <color
+     name="AlMisc2Coral"
+     value="0 0.212 0.29 1" />
+    <color
+     name="AlchemyBackground"
+     value="0.145 0.157 0.165 1" /> <!-- yes, we need that much precision, otherwise we get difference with texture. -->
+    <color
+     name="AlchemyBlack1"
+     value="0.1084 0.1084 0.1084 1" />
+    <color
+     name="AlchemyBlack1_t"
+     value="0.1084 0.1084 0.1084 0.60" />
+     <color
+     name="AlchemyHighlight"
+     reference="AlchemyWhite" /> <!-- White until someone figures how to change text color when highlighed -->
+    <color
+     name="Alchemy_Inv_Link"
+    value="0.624 0.635 0.639 1 " />
+    <color
+     name="AlchemyOrange"
+     value="0.824 0.373 0.082 1" />
+    <color
+     name="AlchemyScriptBG"
+     value="0.0784 0.0784 0.0784 1" />
+     <color
+     name="AlchemyScriptErrorBG"
+     value="0.694 0.125 0.161 1" />
+    <color
+     name="AlchemyText"
+     value="0.72 0.72 0.72 1" />
+     <color
+     name="AlchemyTextDark"
+     value="0.624 0.635 0.639 1" />
+    <color
+     name="AlchemyWhite"
+     value="0.8078 0.8078 0.8078 1" />
+    <color
+     name="TextField_Off"
+     value="0.0980392156862745 0.0980392156862745 0.0980392156862745 1" />
+    <color
+     name="TextField_Disabled"
+     value="0.1411764705882353 0.1411764705882353 0.1411764705882353 1" />
+    <color
+     name="TextField_Active"
+     value="0.0666666666666667 0.0666666666666667 0.0666666666666667 1" />
 	<!-- Named Colors -->
 	<color
 	 name="ALMediaTickerOscillatorColor" 
@@ -593,11 +686,11 @@
     <color
      name="MultiSliderTriangleColor"
      reference="Yellow" />
-  <!--
+  
     <color
       name="NameTagBackground"
       value="0.85 0.85 0.85 0.80" />
-      -->
+      
     <color
       name="NameTagBackground"
       value="0 0 0 1" />

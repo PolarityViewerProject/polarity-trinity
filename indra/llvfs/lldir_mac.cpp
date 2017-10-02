@@ -66,7 +66,7 @@ LLDir_Mac::LLDir_Mac()
 {
 	mDirDelimiter = "/";
 	
-	const std::string     secondLifeString = "Alchemy";
+	const std::string     secondLifeString = "Polarity";
 	
 	std::string executablepathstr = getSystemExecutableFolder();
 	
@@ -186,7 +186,7 @@ bool LLDir_Mac::fileExists(const std::string &filename) const
 std::string LLDir_Mac::getLLPluginLauncher()
 {
 	return gDirUtilp->getAppRODataDir() + gDirUtilp->getDirDelimiter() +
-	"AlchemyPlugin.app/Contents/MacOS/AlchemyPlugin";
+	"PolarityPlugin.app/Contents/MacOS/PolarityPlugin";
 }
 
 /*virtual*/

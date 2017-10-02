@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Install Alchemy Viewer. This script can install the viewer both
+# Install the Polarity Viewer. This script can install the viewer both
 # system-wide and for an individual user.
 
 VT102_STYLE_NORMAL='\E[0m'
@@ -48,8 +48,8 @@ function warn()
 function homedir_install()
 {
     warn "You are not running as a privileged user, so you will only be able"
-    warn "to install Alchemy Viewer in your home directory. If you"
-    warn "would like to install Alchemy Viewer system-wide, please run"
+    warn "to install the Polarity Viewer in your home directory. If you"
+    warn "would like to install the Polarity Viewer system-wide, please run"
     warn "this script as the root user, or with the 'sudo' command."
     echo
 
@@ -58,13 +58,13 @@ function homedir_install()
 	exit 0
     fi
 
-    install_to_prefix "$HOME/.alchemy-install"
-    $HOME/.alchemy-install/etc/refresh_desktop_app_entry.sh
+    install_to_prefix "$HOME/.polarity-install"
+    $HOME/.polarity-install/etc/refresh_desktop_app_entry.sh
 }
 
 function root_install()
 {
-    local default_prefix="/opt/alchemy-install"
+    local default_prefix="/opt/polarity-install"
 
     echo -n "Enter the desired installation directory [${default_prefix}]: ";
     read

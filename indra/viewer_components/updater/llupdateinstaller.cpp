@@ -100,7 +100,7 @@ std::string const & ll_install_failed_marker_path(void)
 {
 	static std::string path;
 	if(path.empty()) {
-		path = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "AlchemyInstallFailed.marker");
+		path = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "PolarityInstallFailed.marker");
 	}
 	return path;
 }

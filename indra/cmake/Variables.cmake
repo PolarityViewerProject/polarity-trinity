@@ -226,7 +226,7 @@ endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 # Default deploy grid
 set(GRID agni CACHE STRING "Target Grid")
 
-set(VIEWER_CHANNEL "Alchemy Test" CACHE STRING "Viewer Channel Name")
+set(VIEWER_CHANNEL "Polarity Test" CACHE STRING "Viewer Channel Name")
 set(VERSION_BUILD "0" CACHE STRING "Revision number passed in from the outside")
 
 option(ENABLE_SIGNING "Enable signing the viewer" OFF)

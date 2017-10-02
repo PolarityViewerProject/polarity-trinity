@@ -5,8 +5,8 @@
 # with the version specified
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
-set(ROOT_PROJECT_NAME "Alchemy" CACHE STRING
-    "The root project/makefile/solution name. Defaults to Alchemy.")
+set(ROOT_PROJECT_NAME "Polarity" CACHE STRING
+    "The root project/makefile/solution name. Defaults to Polarity.")
 project(${ROOT_PROJECT_NAME})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
@@ -82,13 +82,13 @@ elseif (WINDOWS)
 endif (LINUX)
 
 add_subdirectory(${VIEWER_PREFIX}newview)
-add_dependencies(viewer alchemy-bin)
+add_dependencies(viewer polarity-bin)
 
 add_subdirectory(${VIEWER_PREFIX}doxygen EXCLUDE_FROM_ALL)
 
 if (WINDOWS)
   set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    PROPERTY VS_STARTUP_PROJECT alchemy-bin)
+    PROPERTY VS_STARTUP_PROJECT polarity-bin)
 endif (WINDOWS)
 
 if (LL_TESTS)

@@ -191,7 +191,7 @@ int main(int argc, char **argv)
 #if LL_WINDOWS
 	if( strlen( lpCmdLine ) == 0 )
 	{
-		LL_ERRS("slplugin") << "usage: " << "AlchemyPlugin" << " launcher_port" << LL_ENDL;
+		LL_ERRS("slplugin") << "usage: " << "PolarityPlugin" << " launcher_port" << LL_ENDL;
 	};
 
 	U32 port = 0;

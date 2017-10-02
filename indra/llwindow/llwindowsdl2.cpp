@@ -101,7 +101,9 @@ LLWindowSDL2::LLWindowSDL2(LLWindowCallbacks* callbacks,
 	mWindowName = name;
 
 	if (title.empty())
-		mWindowTitle = "Alchemy Viewer";
+	{
+		mWindowTitle = "Polarity Viewer";
+	}
 	else
 		mWindowTitle = title;
 

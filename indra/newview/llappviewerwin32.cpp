@@ -93,7 +93,7 @@ LONG WINAPI catchallCrashHandler(EXCEPTION_POINTERS * /*ExceptionInfo*/)
 	return 0;
 }
 
-const std::string LLAppViewerWin32::sWindowClass = "Alchemy";
+const std::string LLAppViewerWin32::sWindowClass = "Polarity";
 
 // Create app mutex creates a unique global windows object. 
 // If the object can be created it returns true, otherwise

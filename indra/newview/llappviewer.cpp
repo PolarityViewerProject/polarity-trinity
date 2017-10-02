@@ -373,16 +373,16 @@ BOOL gLogoutInProgress = FALSE;
 // Internal globals... that should be removed.
 static std::string gArgs;
 const int MAX_MARKER_LENGTH = 1024;
-const std::string MARKER_FILE_NAME("Alchemy.exec_marker");
-const std::string START_MARKER_FILE_NAME("Alchemy.start_marker");
-const std::string ERROR_MARKER_FILE_NAME("Alchemy.error_marker");
-const std::string LLERROR_MARKER_FILE_NAME("Alchemy.llerror_marker");
-const std::string LOGOUT_MARKER_FILE_NAME("Alchemy.logout_marker");
+const std::string MARKER_FILE_NAME("Polarity.exec_marker");
+const std::string START_MARKER_FILE_NAME("Polarity.start_marker");
+const std::string ERROR_MARKER_FILE_NAME("Polarity.error_marker");
+const std::string LLERROR_MARKER_FILE_NAME("Polarity.llerror_marker");
+const std::string LOGOUT_MARKER_FILE_NAME("Polarity.logout_marker");
 static BOOL gDoDisconnect = FALSE;
 static std::string gLaunchFileOnQuit;
 
 // Used on Win32 for other apps to identify our window (eg, win_setup)
-const char* const VIEWER_WINDOW_CLASSNAME = "Alchemy";
+const char* const VIEWER_WINDOW_CLASSNAME = "Polarity";
 
 //-- LLDeferredTaskList ------------------------------------------------------
 
@@ -730,7 +730,7 @@ LLAppViewer::LLAppViewer()
 
 	// Need to do this initialization before we do anything else, since anything
 	// that touches files should really go through the lldir API
-	gDirUtilp->initAppDirs("Alchemy");
+	gDirUtilp->initAppDirs("Polarity");
 	//
 	// IMPORTANT! Do NOT put anything that will write
 	// into the log files during normal startup until AFTER
@@ -2220,12 +2220,12 @@ void LLAppViewer::initLoggingAndGetLastDuration()
 
 	// Remove the last ".old" log file.
 	std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-							     "Alchemy.old");
+							     "Polarity.old");
 	LLFile::remove(old_log_file);
 
 	// Get name of the log file
 	std::string log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
-							     "Alchemy.log");
+							     "Polarity.log");
  	/*
 	 * Before touching any log files, compute the duration of the last run
 	 * by comparing the ctime of the previous start marker file with the ctime
@@ -3586,10 +3586,10 @@ void LLAppViewer::writeSystemInfo()
         gDebugInfo["Dynamic"] = LLSD::emptyMap();
     
 #if LL_WINDOWS
-	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"Alchemy.log");
+	gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_DUMP,"Polarity.log");
 #else
     //Not ideal but sufficient for good reporting.
-    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"Alchemy.old");  //LLError::logFileName();
+    gDebugInfo["SLLog"] = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,"Polarity.old");  //LLError::logFileName();
 #endif
 
 	gDebugInfo["ClientInfo"]["Name"] = LLVersionInfo::getChannel();

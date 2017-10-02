@@ -48,7 +48,7 @@ LLDesktopNotificationsNotify::LLDesktopNotificationsNotify()
 	notify_init = (notify_init_t) dlsym(handle, "notify_init");
 	notify_notification_new = (notify_notification_new_t) dlsym(handle, "notify_notification_new");
 	notify_notification_show = (notify_notification_show_t) dlsym(handle, "notify_notification_show");
-	notify_init("Alchemy Viewer");
+	notify_init("Polarity Viewer");
     }
 }
 
@@ -62,7 +62,7 @@ void LLDesktopNotificationsNotify::sendNotification(const std::string& title, co
 {
     if (handle && !gFocusMgr.getAppHasFocus())
     {
-	std::string icon_path = gDirUtilp->getCurPath() + "/alchemy_icon.png";
+	std::string icon_path = gDirUtilp->getCurPath() + "/polarity_icon.png";
 	void* notification = notify_notification_new(title.c_str(), body.c_str(), icon_path.c_str());
 	notify_notification_show(notification, NULL);
 	g_object_unref(G_OBJECT(notification));

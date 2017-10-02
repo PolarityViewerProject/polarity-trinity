@@ -627,7 +627,7 @@
                 </menuItem>
             </items>
         </menu>
-        <window title="Alchemy Crash Logger" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="371">
+        <window title="Polarity Crash Logger" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="371">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="508" height="401"/>
@@ -643,7 +643,7 @@
                         </constraints>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="537">
                             <font key="font" metaFont="system"/>
-                            <string key="title">Alchemy appears to have crashed or frozen the last time it ran.
+                            <string key="title">Polarity appears to have crashed or frozen the last time it ran.
 
 This crash reporter collects information about your computer's hardware configuration, operating system, and some viewer logs, all of which are used for debugging purposes only.
 

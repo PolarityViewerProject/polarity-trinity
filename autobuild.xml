@@ -252,11 +252,11 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c92e5fe414a014bb9a4236f130a2ac75</string>
+              <string>e7bde888d64b314fa43fe410b32d5fad</string>
               <key>hash_algorithm</key>
               <string>md5</string>
               <key>url</key>
-              <string>https://depot.alchemyviewer.org/pub/windows64/lib-vc141/boost-1.63.0-windows64-201703280907.tar.bz2</string>
+              <string>http://lib.polarityviewer.net/windows64/msvc-141/boost-1.63.0-windows64-201703280907.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows64</string>
@@ -3149,15 +3149,15 @@
     <key>package_description</key>
     <map>
       <key>copyright</key>
-      <string>Copyright (c) 2013-2017, Alchemy Viewer Project</string>
+      <string>Copyright (c) 2014-2017, Polarity Viewer Project</string>
       <key>description</key>
-      <string>Alchemy Viewer</string>
+      <string>Second Life Third-party client</string>
       <key>license</key>
       <string>LGPL</string>
       <key>license_file</key>
       <string>docs/LICENSE-source.txt</string>
       <key>name</key>
-      <string>Alchemy Viewer</string>
+      <string>Polarity Viewer</string>
       <key>platforms</key>
       <map>
         <key>common</key>
@@ -3178,7 +3178,7 @@
                 <array>
                   <string>-DCMAKE_BUILD_TYPE:STRING=Release</string>
                   <string>-DWORD_SIZE:STRING=32</string>
-                  <string>-DROOT_PROJECT_NAME:STRING=Alchemy</string>
+                  <string>-DROOT_PROJECT_NAME:STRING=Polarity</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                 </array>
               </map>
@@ -3198,8 +3198,8 @@
                 <array>
                   <string>-DCMAKE_BUILD_TYPE:STRING=Debug</string>
                   <string>-DWORD_SIZE:STRING=32</string>
-                  <string>-DROOT_PROJECT_NAME:STRING=Alchemy</string>
-                  <string>-DINSTALL_PROPRIETARY=TRUE</string>
+                  <string>-DROOT_PROJECT_NAME:STRING=Polarity</string>
+                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
                 </array>
               </map>
               <key>name</key>
@@ -3219,7 +3219,7 @@
                 <array>
                   <string>-DCMAKE_BUILD_TYPE:STRING=Debug</string>
                   <string>-DWORD_SIZE:STRING=32</string>
-                  <string>-DROOT_PROJECT_NAME:STRING=Alchemy</string>
+                  <string>-DROOT_PROJECT_NAME:STRING=Polarity</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                 </array>
               </map>
@@ -3239,8 +3239,8 @@
                 <array>
                   <string>-DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo</string>
                   <string>-DWORD_SIZE:STRING=32</string>
-                  <string>-DROOT_PROJECT_NAME:STRING=Alchemy</string>
-                  <string>-DINSTALL_PROPRIETARY=TRUE</string>
+                  <string>-DROOT_PROJECT_NAME:STRING=Polarity</string>
+                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
                 </array>
               </map>
               <key>name</key>
@@ -3260,7 +3260,7 @@
                 <array>
                   <string>-DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo</string>
                   <string>-DWORD_SIZE:STRING=32</string>
-                  <string>-DROOT_PROJECT_NAME:STRING=Alchemy</string>
+                  <string>-DROOT_PROJECT_NAME:STRING=Polarity</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                 </array>
               </map>
@@ -3280,8 +3280,8 @@
                 <array>
                   <string>-DCMAKE_BUILD_TYPE:STRING=Release</string>
                   <string>-DWORD_SIZE:STRING=32</string>
-                  <string>-DROOT_PROJECT_NAME:STRING=Alchemy</string>
-                  <string>-DINSTALL_PROPRIETARY=TRUE</string>
+                  <string>-DROOT_PROJECT_NAME:STRING=Polarity</string>
+                  <string>-DINSTALL_PROPRIETARY=FALSE</string>
                 </array>
               </map>
               <key>name</key>
@@ -3301,7 +3301,7 @@
                 <array>
                   <string>-DCMAKE_BUILD_TYPE:STRING=Release</string>
                   <string>-DWORD_SIZE:STRING=32</string>
-                  <string>-DROOT_PROJECT_NAME:STRING=Alchemy</string>
+                  <string>-DROOT_PROJECT_NAME:STRING=Polarity</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                 </array>
               </map>
@@ -3345,7 +3345,7 @@
                   <string>"Unix Makefiles"</string>
                   <string>-DCMAKE_BUILD_TYPE:STRING=Release</string>
                   <string>-DWORD_SIZE:STRING=64</string>
-                  <string>-DROOT_PROJECT_NAME:STRING=Alchemy</string>
+                  <string>-DROOT_PROJECT_NAME:STRING=Polarity</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                 </array>
               </map>
@@ -3365,7 +3365,7 @@
                 <key>options</key>
                 <array>
                   <string>-configuration Debug</string>
-                  <string>-project Alchemy.xcodeproj</string>
+                  <string>-project Polarity.xcodeproj</string>
                 </array>
               </map>
               <key>configure</key>
@@ -3392,7 +3392,7 @@
                 <key>options</key>
                 <array>
                   <string>-configuration Debug</string>
-                  <string>-project Alchemy.xcodeproj</string>
+                  <string>-project Polarity.xcodeproj</string>
                 </array>
               </map>
               <key>configure</key>
@@ -3419,7 +3419,7 @@
                 <key>options</key>
                 <array>
                   <string>-configuration RelWithDebInfo</string>
-                  <string>-project Alchemy.xcodeproj</string>
+                  <string>-project Polarity.xcodeproj</string>
                 </array>
               </map>
               <key>configure</key>
@@ -3448,7 +3448,7 @@
                 <key>options</key>
                 <array>
                   <string>-configuration RelWithDebInfo</string>
-                  <string>-project Alchemy.xcodeproj</string>
+                  <string>-project Polarity.xcodeproj</string>
                 </array>
               </map>
               <key>configure</key>
@@ -3475,7 +3475,7 @@
                 <key>options</key>
                 <array>
                   <string>-configuration Release</string>
-                  <string>-project Alchemy.xcodeproj</string>
+                  <string>-project Polarity.xcodeproj</string>
                 </array>
               </map>
               <key>configure</key>
@@ -3502,7 +3502,7 @@
                 <key>options</key>
                 <array>
                   <string>-configuration Release</string>
-                  <string>-project Alchemy.xcodeproj</string>
+                  <string>-project Polarity.xcodeproj</string>
                 </array>
               </map>
               <key>configure</key>
@@ -3827,7 +3827,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>devenv</string>
@@ -3855,7 +3855,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>msbuild.exe</string>
@@ -3876,7 +3876,6 @@
                   <string>"Visual Studio 15"</string>
                   <string>-DCMAKE_SYSTEM_VERSION="10.0.14393.0"</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DUSE_LL_STUBS:BOOL=ON</string>
                 </array>
               </map>
               <key>name</key>
@@ -3888,7 +3887,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>devenv</string>
@@ -3918,7 +3917,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>msbuild.exe</string>
@@ -3940,7 +3939,6 @@
                   <string>-DCMAKE_SYSTEM_VERSION="10.0.14393.0"</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DUSE_LL_STUBS:BOOL=ON</string>
                 </array>
               </map>
               <key>name</key>
@@ -3952,7 +3950,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>devenv</string>
@@ -3980,7 +3978,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>msbuild.exe</string>
@@ -4023,7 +4021,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>cov-build</string>
@@ -4060,7 +4058,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>BuildConsole</string>
@@ -4089,7 +4087,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>msbuild.exe</string>
@@ -4111,7 +4109,6 @@
                   <string>-DCMAKE_SYSTEM_VERSION="10.0.14393.0"</string>
                   <string>-DWORD_SIZE:STRING=64</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DUSE_LL_STUBS:BOOL=ON</string>
                 </array>
               </map>
               <key>name</key>
@@ -4123,7 +4120,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>BuildConsole</string>
@@ -4154,7 +4151,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>msbuild.exe</string>
@@ -4177,7 +4174,6 @@
                   <string>-DWORD_SIZE:STRING=64</string>
                   <string>-DINSTALL_PROPRIETARY=FALSE</string>
                   <string>-DUSE_KDU=FALSE</string>
-                  <string>-DUSE_LL_STUBS:BOOL=ON</string>
                 </array>
               </map>
               <key>name</key>
@@ -4189,7 +4185,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>BuildConsole</string>
@@ -4219,7 +4215,7 @@
               <map>
                 <key>arguments</key>
                 <array>
-                  <string>Alchemy.sln</string>
+                  <string>Polarity.sln</string>
                 </array>
                 <key>command</key>
                 <string>msbuild.exe</string>

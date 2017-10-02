@@ -374,9 +374,9 @@ std::string LLDir::buildSLOSCacheDir() const
 	else
 	{
 #if !defined(LL_DARWIN) && (defined(_WIN64) || defined(__amd64__) || defined(__x86_64__))
-		res = add(getOSCacheDir(), "Alchemy64");
+		res = add(getOSCacheDir(), "Polarity64");
 #else
-		res = add(getOSCacheDir(), "Alchemy");
+		res = add(getOSCacheDir(), "Polarity");
 #endif
 	}
 	return res;

@@ -766,7 +766,7 @@ set(viewer_SOURCE_FILES
     qtoolalign.cpp
     )
 
-set(VIEWER_BINARY_NAME "alchemy-bin" CACHE STRING
+set(VIEWER_BINARY_NAME "polarity-bin" CACHE STRING
     "The name of the viewer executable to create.")
 
 set(viewer_HEADER_FILES
@@ -1476,9 +1476,9 @@ if (DARWIN)
 
   # Add resource files to the project.
   set(viewer_RESOURCE_FILES
-    alchemy.icns
-    Info-Alchemy.plist
-    Alchemy.xib
+    polarity.icns
+    Info-Polarity.plist
+    Polarity.xib
     # CMake doesn't seem to support Xcode language variants well just yet
     English.lproj/InfoPlist.strings
     English.lproj/language.txt
@@ -1540,30 +1540,30 @@ if (WINDOWS)
     set(ICON_PATH "test")
     set(VIEWER_MACOSX_PHASE "d")
     string(TOLOWER ${VIEWER_CHANNEL} channel_lower)
-    if(channel_lower MATCHES "^alchemy release")
+    if(channel_lower MATCHES "^polarity release")
         set(ICON_PATH "release")
         set(VIEWER_MACOSX_PHASE "f")
-    elseif(channel_lower MATCHES "^alchemy beta")
+    elseif(channel_lower MATCHES "^polarity beta")
         set(ICON_PATH "beta")
         set(VIEWER_MACOSX_PHASE "b")
-    elseif(channel_lower MATCHES "^alchemy project")
+    elseif(channel_lower MATCHES "^polarity project")
         set(ICON_PATH "project")
         set(VIEWER_MACOSX_PHASE "a")
     endif()
     message("Copying icons for ${ICON_PATH}")
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/alchemy.ico"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/project.ico"
         "${CMAKE_CURRENT_SOURCE_DIR}/res/ll_icon.ico"
       )
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/alchemy_256.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/polarity_256.BMP"
         "${CMAKE_CURRENT_SOURCE_DIR}/res/ll_icon.BMP"
       )
     execute_process(
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/alchemy_256.BMP"
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/${ICON_PATH}/polarity_256.BMP"
         "${CMAKE_CURRENT_SOURCE_DIR}/res-sdl/ll_icon.BMP"
       )
 
@@ -1795,7 +1795,7 @@ if (WINDOWS)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
         LINK_FLAGS "/debug /SUBSYSTEM:WINDOWS ${TCMALLOC_LINK_FLAGS} ${TBBMALLOC_LINK_FLAGS}"
-        LINK_FLAGS_RELEASE "/MAP:\"alchemy-bin.MAP\""
+        LINK_FLAGS_RELEASE "/MAP:\"polarity-bin.MAP\""
         )
 
     if(USE_PRECOMPILED_HEADERS)
@@ -1848,7 +1848,7 @@ if (WINDOWS)
       ${ARCH_PREBUILT_DIRS_RELEASE}/ssleay32.dll
       ${ARCH_PREBUILT_DIRS_DEBUG}/libeay32.dll
       ${ARCH_PREBUILT_DIRS_DEBUG}/ssleay32.dll
-      AlchemyPlugin
+      PolarityPlugin
       media_plugin_cef
       windows-crash-logger
       )
@@ -1932,7 +1932,7 @@ if (WINDOWS)
     endif (EXISTS ${CMAKE_SOURCE_DIR}/copy_win_scripts)
 
     add_dependencies(${VIEWER_BINARY_NAME}
-      AlchemyPlugin
+      PolarityPlugin
       windows-crash-logger
       )
 
@@ -2096,14 +2096,14 @@ target_link_libraries(${VIEWER_BINARY_NAME}
 set(ARTWORK_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH
     "Path to artwork files.")
 
-if (LINUX)
-  set(product Alchemy-${ARCH}-${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION})
+if(LINUX)
+  set(product Polarity-${ARCH}-${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION})
 
   # These are the generated targets that are copied to package/
   set(COPY_INPUT_DEPENDENCIES
     ${VIEWER_BINARY_NAME}
     linux-crash-logger
-    AlchemyPlugin
+    PolarityPlugin
     media_plugin_gstreamer010
     llcommon
     )
@@ -2166,16 +2166,16 @@ endif (LINUX)
 
 if (DARWIN)
   # These all get set with PROPERTIES
-  set(product "Alchemy")
-  set(MACOSX_BUNDLE_INFO_STRING "Alchemy Viewer")
-  set(MACOSX_BUNDLE_ICON_FILE "alchemy.icns")
-  set(MACOSX_BUNDLE_GUI_IDENTIFIER "org.alchemyviewer.viewer")
+  set(product "Polarity")
+  set(MACOSX_BUNDLE_INFO_STRING "Polarity Viewer")
+  set(MACOSX_BUNDLE_ICON_FILE "polarity.icns")
+  set(MACOSX_BUNDLE_GUI_IDENTIFIER "org.polarityviewer.viewer")
   set(MACOSX_BUNDLE_LONG_VERSION_STRING "${VIEWER_CHANNEL} ${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION}")
-  set(MACOSX_BUNDLE_BUNDLE_NAME "Alchemy")
+  set(MACOSX_BUNDLE_BUNDLE_NAME "Polarity")
   set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${VIEWER_SHORT_VERSION}")
   set(MACOSX_BUNDLE_BUNDLE_VERSION "${VIEWER_SHORT_VERSION}${VIEWER_MACOSX_PHASE}${VIEWER_REVISION}")
-  set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 2013-2017 Alchemy Viewer Project")
-  set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "Alchemy")
+  set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 2014-2017 Polarity Viewer Project")
+  set(MACOSX_BUNDLE_NSMAIN_NIB_FILE "Polarity")
   set(MACOSX_BUNDLE_NSPRINCIPAL_CLASS "LLNSApplication")
   
   set_target_properties(
@@ -2184,11 +2184,11 @@ if (DARWIN)
     RESOURCE "${viewer_RESOURCE_FILES}"
     OUTPUT_NAME "${product}"
     MACOSX_BUNDLE_INFO_PLIST
-    "${CMAKE_CURRENT_SOURCE_DIR}/Info-Alchemy.plist"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Info-Polarity.plist"
     )
 
   configure_file(
-     "${CMAKE_CURRENT_SOURCE_DIR}/Info-Alchemy.plist"
+     "${CMAKE_CURRENT_SOURCE_DIR}/Info-Polarity.plist"
      "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${product}.app/Contents/Info.plist"
     )
 
@@ -2213,9 +2213,9 @@ if (DARWIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
     )
   if (WORD_SIZE EQUAL 32)
-      add_dependencies(${VIEWER_BINARY_NAME} AlchemyPlugin media_plugin_cef mac-crash-logger)
+      add_dependencies(${VIEWER_BINARY_NAME} PolarityPlugin media_plugin_cef mac-crash-logger)
   elseif (WORD_SIZE EQUAL 64)
-     add_dependencies(${VIEWER_BINARY_NAME} AlchemyPlugin media_plugin_cef mac-crash-logger)
+     add_dependencies(${VIEWER_BINARY_NAME} PolarityPlugin media_plugin_cef mac-crash-logger)
   endif (WORD_SIZE EQUAL 32)
 
   if (ENABLE_SIGNING)
@@ -2259,9 +2259,9 @@ if (PACKAGE)
   set(SYMBOL_SEARCH_DIRS "")
   if (WINDOWS)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}")
-    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/alchemy-symbols-windows.tar.bz2")
-    # AlchemyPlugin.exe failing symbols dump - need to debug, might have to do with updated version of google breakpad
-    # set(VIEWER_EXE_GLOBS "${VIEWER_BINARY_NAME}${CMAKE_EXECUTABLE_SUFFIX} AlchemyPlugin.exe")
+    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/polarity-symbols-windows.tar.bz2")
+    # PolarityPlugin.exe failing symbols dump - need to debug, might have to do with updated version of google breakpad
+    # set(VIEWER_EXE_GLOBS "${VIEWER_BINARY_NAME}${CMAKE_EXECUTABLE_SUFFIX} PolarityPlugin.exe")
     set(VIEWER_EXE_GLOBS "${VIEWER_BINARY_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
     set(VIEWER_LIB_GLOB "*${CMAKE_SHARED_MODULE_SUFFIX}")
     set(VIEWER_COPY_MANIFEST copy_w_viewer_manifest)
@@ -2272,14 +2272,14 @@ if (PACKAGE)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/llplugin/slplugin/${CMAKE_CFG_INTDIR}")
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/mac_crash_logger/${CMAKE_CFG_INTDIR}")
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/gstreamer010/${CMAKE_CFG_INTDIR}")
-    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/alchemy-symbols-darwin.tar.bz2")
-    set(VIEWER_EXE_GLOBS "'Alchemy' AlchemyPlugin mac-crash-logger")
+    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/polarity-symbols-darwin.tar.bz2")
+    set(VIEWER_EXE_GLOBS "'Polarity' PolarityPlugin mac-crash-logger")
     set(VIEWER_LIB_GLOB "*.dylib")
   endif (DARWIN)
   if (LINUX)
     list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/packaged")
-    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/alchemy-symbols-linux.tar.bz2")
-    set(VIEWER_EXE_GLOBS "do-not-directly-run-alchemy-bin AlchemyPlugin")
+    set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/polarity-symbols-linux.tar.bz2")
+    set(VIEWER_EXE_GLOBS "do-not-directly-run-polarity-bin PolarityPlugin")
     set(VIEWER_LIB_GLOB "*${CMAKE_SHARED_MODULE_SUFFIX}*")
     set(VIEWER_COPY_MANIFEST copy_l_viewer_manifest)
   endif (LINUX)

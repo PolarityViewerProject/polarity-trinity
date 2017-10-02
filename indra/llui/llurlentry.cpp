@@ -1479,7 +1479,7 @@ void LLUrlEntryExperienceProfile::onExperienceDetails( const LLSD& experience_de
 //
 LLUrlEntryJira::LLUrlEntryJira()
 {
-	mPattern = boost::regex("((?:ALCH|BUG|CHOP|FIRE|MAINT|OPEN|SCR|STORM|SVC|VWR|WEB)-\\d+)",
+	mPattern = boost::regex("((?:ALCH|BUG|CHOP|FIRE|MAINT|OPEN|PLVR|SCR|STORM|SVC|VWR|WEB)-\\d+)",
 							boost::regex::perl);
 	mMenuName = "menu_url_http.xml";
 	mTooltip = LLTrans::getString("TooltipHttpUrl");
@@ -1498,7 +1498,11 @@ std::string LLUrlEntryJira::getTooltip(const std::string &string) const
 std::string LLUrlEntryJira::getUrl(const std::string &url) const
 {
 	std::string ret;
-	if (url.find("ALCH") != std::string::npos)
+	if (url.find("PLVR") != std::string::npos)
+	{
+		ret = (boost::format("http://polarityviewer.atlassian.net/browse/%1%") % url).str();
+	}
+	else if (url.find("ALCH") != std::string::npos)
 	{
 		ret = (boost::format("http://alchemy.atlassian.net/browse/%1%") % url).str();
 	}
