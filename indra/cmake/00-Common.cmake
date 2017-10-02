@@ -94,6 +94,7 @@ if (WINDOWS)
       /GS
       /TP
       /W3
+      /WL
       /c
       /Zc:wchar_t
       /Zc:forScope
@@ -260,7 +261,7 @@ if (LINUX OR DARWIN)
   endif (NOT UNIX_DISABLE_FATAL_WARNINGS)
 
   if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    set(UNIX_WARNINGS "-Wall -Wno-sign-compare -Wno-unused-variable -Wno-maybe-uninitialized ${UNIX_WARNINGS} ")
+    set(UNIX_WARNINGS "-Wno-sign-compare -Wno-unused-variable -Wno-maybe-uninitialized ${UNIX_WARNINGS} ")
     set(UNIX_CXX_WARNINGS "${UNIX_WARNINGS} -Wno-reorder")
   elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
     set(UNIX_WARNINGS "-Wall -Wno-sign-compare ${UNIX_WARNINGS} ")
