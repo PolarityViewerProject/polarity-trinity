@@ -584,6 +584,10 @@ bool idle_startup()
 			}
 		}
 
+		// <polarity> Save and restore logging level
+		LLError::setDefaultLevel(static_cast<LLError::ELevel>(gSavedSettings.getU32("PolarityLoggingLevel")));
+		// </polarity>
+
 		LL_INFOS("AppInit") << "Message System Initialized." << LL_ENDL;
 
 		//-------------------------------------------------

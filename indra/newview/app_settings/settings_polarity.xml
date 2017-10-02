@@ -24,5 +24,18 @@
       <key>Value</key>
       <real>60</real>
     </map>
+    <key>PolarityLoggingLevel</key>
+    <map>
+      <key>Comment</key>
+      <string>Stored Log level for persistence across sessions. Do not edit directly.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>HideFromEditor</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <real>1</real>
+    </map>
   </map>
 </llsd>

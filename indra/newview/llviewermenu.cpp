@@ -2370,7 +2370,15 @@ class LLDevelopSetLoggingLevel : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		U32 level = userdata.asInteger();
+		// <polarity> Save and restore logging level
+		if(static_cast<LLError::ELevel>(level) == LLError::LEVEL_ERROR)
+		{
+			// Error causes everything to become an error, use "NONE" as the user probably wants silence
+			level = LLError::LEVEL_NONE;
+		}
 		LLError::setDefaultLevel(static_cast<LLError::ELevel>(level));
+		gSavedSettings.setU32("PolarityLoggingLevel", level);
+		// </polarity>
 		return true;
 	}
 };
