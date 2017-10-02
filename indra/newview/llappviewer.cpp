@@ -3326,29 +3326,94 @@ LLSD LLAppViewer::getViewerInfo() const
 	// is available to a getInfo() caller as to the user opening
 	// LLFloaterAbout.
 	LLSD info;
-	LLSD version;
-	version.append(LLVersionInfo::getMajor());
-	version.append(LLVersionInfo::getMinor());
-	version.append(LLVersionInfo::getPatch());
-	version.append(LLVersionInfo::getBuild());
-	info["VIEWER_VERSION"] = version;
-	info["VIEWER_VERSION_STR"] = LLVersionInfo::getVersion();
-	info["BUILD_DATE"] = __DATE__;
-	info["BUILD_TIME"] = __TIME__;
-	info["CHANNEL"] = LLVersionInfo::getChannel();
-    std::string build_config = LLVersionInfo::getBuildConfig();
-    if (build_config != "Release")
-    {
-        info["BUILD_CONFIG"] = build_config;
-    }
+	// <polarity> improved about code and data
+	info["VIEWER_VERSION"] = LLVersionInfo::getChannelAndVersionStatic();
+	// <polarity> Use date and time provided by the build system
+	//info["BUILD_DATE"] = __DATE__;
+	//info["BUILD_TIME"] = __TIME__;
+	info["BUILD_DATE"] = LLVersionInfo::getBuildDate();
+	info["BUILD_TIME"] = LLVersionInfo::getBuildTime();
 
+#if defined(_WIN64) || defined(__amd64__) || defined(__x86_64__)
+	static const std::string build_arch = "x64, "; // <polarity>
+#else
+	static const std::string build_arch = "x86, ";
+#endif
+	static const std::string build_config = LLVersionInfo::getBuildConfig();
+#ifdef INTERNAL_BUILD
+	static const std::string internal_string = ", " + LLTrans::getString("InternalBuild");
+#else
+	static const std::string internal_string = "";
+#endif
+	static const std::string build_config_string = LLTrans::getString("BuildConfiguration") + " ";
+	info["BUILD_CONFIG"] = build_config_string + build_arch + build_config + internal_string;
+
+	// <polarity> Don't use Wiki link as we don't have this set up ATM - Xenhat
 	// return a URL to the release notes for this viewer, such as:
 	// http://wiki.secondlife.com/wiki/Release_Notes/Second Life Beta Viewer/2.1.0.123456
-	std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL");
-	if (! LLStringUtil::endsWith(url, "/"))
-		url += "/";
-	url += LLURI::escape(LLVersionInfo::getChannel() + " " + LLVersionInfo::getVersion());
-	info["VIEWER_RELEASE_NOTES_URL"] = url;
+	//std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL");
+	//if (! LLStringUtil::endsWith(url, "/"))
+	//	url += "/";
+	//url += LLURI::escape(LLVersionInfo::getChannel() + " " + LLVersionInfo::getVersion());
+	//info["VIEWER_RELEASE_NOTES_URL"] = url;
+
+	std::string rel_notes = gSavedSettings.getString("LastReleaseNotesURL");
+	if (!rel_notes.empty())
+	{
+		// allow the "Release Notes" URL label to be localized
+		static const std::string release_notes_text = LLTrans::getString("ReleaseNotes");
+		static const std::string release_notes_url = "[" + rel_notes + " " + LLTrans::getString("ReleaseNotes") + "]";
+		info["VIEWER_RELEASE_NOTES_URL"] = release_notes_url;
+	}
+	else
+	{
+		info["VIEWER_RELEASE_NOTES_URL"] = "";
+	}
+
+	info["LATEST_MERGED_VERSION"] = LLVersionInfo::getLastLindenRelease();
+	// <polarity> build url to the commit the viewer was built on
+	// TODO: Get url from repo config maybe?
+	static const std::string channel_name_release	= "Polarity Release";
+	static const std::string channel_name_beta		= "Polarity Beta";
+	static const std::string channel_name_nightly	= "Polarity Project XenNightly";
+
+	std::string commit_url = "[";
+	if(LLVersionInfo::getChannel() == channel_name_release)
+	{
+		commit_url += "https://bitbucket.org/polarityviewer/polarity-release/commits/";
+	}
+	else if(LLVersionInfo::getChannel() == channel_name_beta)
+	{
+		commit_url += "https://bitbucket.org/polarityviewer/polarity-beta/commits/";
+	}
+	else if(LLVersionInfo::getChannel() == channel_name_nightly)
+	{
+		commit_url += "https://bitbucket.org/polarityviewer/xenhat.polarity-development/commits/";
+	}
+	if(commit_url != "[")
+	{
+		commit_url += LLVersionInfo::getBuildCommitHashLong() + " ";
+	}
+	commit_url += LLVersionInfo::getBuildCommitHash() +"]";
+	info["BUILD_HASH"] = commit_url;
+	static const std::string build_number = LLVersionInfo::getBuildNumber();
+	if(!build_number.empty())
+	{
+		static const std::string build_number_str = " Build No. " + build_number; // Hashtag (#) isn't a valid XML character, sorry.
+		// TODO: More translation work
+		info["BUILD_NUMBER"] = build_number_str; 
+	}
+	else
+	{
+		// This should never happen, but let's make it sane in case it happens
+		static const std::string build_number_str = "";
+		info["BUILD_NUMBER"] = build_number_str;
+	}
+
+	// return a URL to the Latest merged Linden Lab release
+	std::string latest_merged = info["LATEST_MERGED_VERSION"];
+	std::string ll_source_url = "https://bitbucket.org/lindenlab/viewer-release/commits/tag/" + latest_merged + "-release";
+	info["LATEST_SOURCE_URL"] = ll_source_url;
 
 #if LL_MSVC
 	info["COMPILER"] = "MSVC";

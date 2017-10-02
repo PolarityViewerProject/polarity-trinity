@@ -261,4 +261,8 @@ source_group("CMake Rules" FILES CMakeLists.txt)
 
 mark_as_advanced(AUTOBUILD_PLATFORM_NAME)
 
+add_definitions(
+  /DBUILD_NUMBER=${BUILD_NUMBER}
+  )
+
 endif(NOT DEFINED ${CMAKE_CURRENT_LIST_FILE}_INCLUDED)
