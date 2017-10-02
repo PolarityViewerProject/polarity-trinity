@@ -522,7 +522,7 @@
     <key>AlchemyMinimapRenderObjects</key>
     <map>
       <key>Comment</key>
-      <string>>Render objects on minimap</string>
+      <string>Render objects on minimap</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
