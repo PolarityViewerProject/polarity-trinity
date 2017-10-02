@@ -51,9 +51,9 @@ LLImageFilter::LLImageFilter(const std::string& file_path) :
     mHistoBrightness(NULL),
     mStencilBlendMode(STENCIL_BLEND_MODE_BLEND),
     mStencilShape(STENCIL_SHAPE_UNIFORM),
-    mStencilMin(0.0),
-    mStencilMax(1.0),
-    mStencilGamma(1.0)
+    mStencilMin(0.0f),
+    mStencilMax(1.0f),
+    mStencilGamma(1.0f)
 {
     // Load filter description from file
 	llifstream filter_xml(file_path.c_str());
@@ -145,7 +145,7 @@ void LLImageFilter::executeFilter(LLPointer<LLImageRaw> raw_image)
             // Get the float params: mandatory min, max then the optional parameters (4 max)
             F32 min = (F32)(mFilterData[i][3].asReal());
             F32 max = (F32)(mFilterData[i][4].asReal());
-            F32 params[4] = {0.0, 0.0, 0.0, 0.0};
+            F32 params[4] = {0.0f, 0.0f, 0.0f, 0.0f};
             for (S32 j = 5; (j < mFilterData[i].size()) && (j < 9); j++)
             {
                 params[j-5] = (F32)(mFilterData[i][j].asReal());
@@ -224,7 +224,7 @@ void LLImageFilter::executeFilter(LLPointer<LLImageRaw> raw_image)
             LLMatrix3 kernel;
             for (S32 i = 0; i < NUM_VALUES_IN_MAT3; i++)
                 for (S32 j = 0; j < NUM_VALUES_IN_MAT3; j++)
-                    kernel.mMatrix[i][j] = 1.0;
+                    kernel.mMatrix[i][j] = 1.0f;
             convolve(kernel,true,false);
         }
         else if (filter_name == "sharpen")
@@ -232,7 +232,7 @@ void LLImageFilter::executeFilter(LLPointer<LLImageRaw> raw_image)
             LLMatrix3 kernel;
             for (S32 k = 0; k < NUM_VALUES_IN_MAT3; k++)
                 for (S32 j = 0; j < NUM_VALUES_IN_MAT3; j++)
-                    kernel.mMatrix[k][j] = -1.0;
+                    kernel.mMatrix[k][j] = -1.0f;
             kernel.mMatrix[1][1] = 9.0;
             convolve(kernel,false,false);
         }
@@ -241,7 +241,7 @@ void LLImageFilter::executeFilter(LLPointer<LLImageRaw> raw_image)
             LLMatrix3 kernel;
             for (S32 k = 0; k < NUM_VALUES_IN_MAT3; k++)
                 for (S32 j = 0; j < NUM_VALUES_IN_MAT3; j++)
-                    kernel.mMatrix[k][j] = -1.0;
+                    kernel.mMatrix[k][j] = -1.0f;
             kernel.mMatrix[1][1] = 8.0;
             convolve(kernel,false,true);
         }
@@ -249,8 +249,8 @@ void LLImageFilter::executeFilter(LLPointer<LLImageRaw> raw_image)
         {
             LLMatrix3 kernel;
             S32 index = 1;
-            bool normalize = (mFilterData[i][index++].asReal() > 0.0);
-            bool abs_value = (mFilterData[i][index++].asReal() > 0.0);
+            bool normalize = (mFilterData[i][index++].asReal() > 0.0f);
+            bool abs_value = (mFilterData[i][index++].asReal() > 0.0f);
             for (S32 k = 0; k < NUM_VALUES_IN_MAT3; k++)
                 for (S32 j = 0; j < NUM_VALUES_IN_MAT3; j++)
                     kernel.mMatrix[k][j] = mFilterData[i][index++].asReal();
@@ -279,7 +279,7 @@ void LLImageFilter::executeFilter(LLPointer<LLImageRaw> raw_image)
 
 void LLImageFilter::blendStencil(F32 alpha, U8* pixel, U8 red, U8 green, U8 blue)
 {
-    F32 inv_alpha = 1.0 - alpha;
+    F32 inv_alpha = 1.0f - alpha;
     switch (mStencilBlendMode)
     {
         case STENCIL_BLEND_MODE_BLEND:
@@ -360,13 +360,13 @@ void LLImageFilter::convolve(const LLMatrix3 &kernel, bool normalize, bool abs_v
 	llassert( components >= 1 && components <= 4 );
     
     // Compute normalization factors
-    F32 kernel_min = 0.0;
-    F32 kernel_max = 0.0;
+    F32 kernel_min = 0.0f;
+    F32 kernel_max = 0.0f;
     for (S32 i = 0; i < NUM_VALUES_IN_MAT3; i++)
     {
         for (S32 j = 0; j < NUM_VALUES_IN_MAT3; j++)
         {
-            if (kernel.mMatrix[i][j] >= 0.0)
+            if (kernel.mMatrix[i][j] >= 0.0f)
                 kernel_max += kernel.mMatrix[i][j];
             else
                 kernel_min += kernel.mMatrix[i][j];
@@ -377,7 +377,7 @@ void LLImageFilter::convolve(const LLMatrix3 &kernel, bool normalize, bool abs_v
         kernel_max = llabs(kernel_max);
         kernel_min = llabs(kernel_min);
         kernel_max = llmax(kernel_max,kernel_min);
-        kernel_min = 0.0;
+        kernel_min = 0.0f;
     }
     F32 kernel_range = kernel_max - kernel_min;
     
@@ -507,8 +507,8 @@ void LLImageFilter::filterScreen(EScreenMode mode, const F32 wave_length, const 
     U8 gamma[256];
     for (S32 i = 0; i < 256; i++)
     {
-        F32 gamma_i = llclampf((float)(powf((float)(i)/255.0,1.0/4.0)));
-        gamma[i] = (U8)(255.0 * gamma_i);
+        F32 gamma_i = llclampf((float)(powf((float)(i)/255.0,1.0f/4.0)));
+        gamma[i] = (U8)(255.0f* gamma_i);
     }
     
 	U8* dst_data = mImage->getData();
@@ -517,19 +517,19 @@ void LLImageFilter::filterScreen(EScreenMode mode, const F32 wave_length, const 
         for (S32 i = 0; i < width; i++)
         {
             // Compute screen value
-            F32 value = 0.0;
-            F32 di = 0.0;
-            F32 dj = 0.0;
+            F32 value = 0.0f;
+            F32 di = 0.0f;
+            F32 dj = 0.0f;
             switch (mode)
             {
                 case SCREEN_MODE_2DSINE:
                     di =  cos*i + sin*j;
                     dj = -sin*i + cos*j;
-                    value = (sinf(2*F_PI*di/wave_length_pixels)*sinf(2*F_PI*dj/wave_length_pixels)+1.0)*255.0/2.0;
+                    value = (sinf(2*F_PI*di/wave_length_pixels)*sinf(2*F_PI*dj/wave_length_pixels)+1.0f)*255.0/2.0;
                     break;
                 case SCREEN_MODE_LINE:
                     dj = sin*i - cos*j;
-                    value = (sinf(2*F_PI*dj/wave_length_pixels)+1.0)*255.0/2.0;
+                    value = (sinf(2*F_PI*dj/wave_length_pixels)+1.0f)*255.0/2.0;
                     break;
             }
             U8 dst_value = (dst_data[VRED] >= (U8)(value) ? gamma[dst_data[VRED] - (U8)(value)] : 0);
@@ -556,16 +556,16 @@ void LLImageFilter::setStencil(EStencilShape shape, EStencilBlendMode mode, F32 
     mStencilCenterX = (S32)(mImage->getWidth()  + params[0] * (F32)(mImage->getHeight()))/2;
     mStencilCenterY = (S32)(mImage->getHeight() + params[1] * (F32)(mImage->getHeight()))/2;
     mStencilWidth = (S32)(params[2] * (F32)(mImage->getHeight()))/2;
-    mStencilGamma = (params[3] <= 0.0 ? 1.0 : params[3]);
+    mStencilGamma = (params[3] <= 0.0f ? 1.0f : params[3]);
 
-    mStencilWavelength = (params[0] <= 0.0 ? 10.0 : params[0] * (F32)(mImage->getHeight()) / 2.0);
+    mStencilWavelength = (params[0] <= 0.0f ? 10.0f : params[0] * (F32)(mImage->getHeight()) / 2.0f);
     mStencilSine   = sinf(params[1]*DEG_TO_RAD);
     mStencilCosine = cosf(params[1]*DEG_TO_RAD);
 
-    mStencilStartX = ((F32)(mImage->getWidth())  + params[0] * (F32)(mImage->getHeight()))/2.0;
-    mStencilStartY = ((F32)(mImage->getHeight()) + params[1] * (F32)(mImage->getHeight()))/2.0;
-    F32 end_x      = ((F32)(mImage->getWidth())  + params[2] * (F32)(mImage->getHeight()))/2.0;
-    F32 end_y      = ((F32)(mImage->getHeight()) + params[3] * (F32)(mImage->getHeight()))/2.0;
+    mStencilStartX = ((F32)(mImage->getWidth())  + params[0] * (F32)(mImage->getHeight()))/2.0f;
+    mStencilStartY = ((F32)(mImage->getHeight()) + params[1] * (F32)(mImage->getHeight()))/2.0f;
+    F32 end_x      = ((F32)(mImage->getWidth())  + params[2] * (F32)(mImage->getHeight()))/2.0f;
+    F32 end_y      = ((F32)(mImage->getHeight()) + params[3] * (F32)(mImage->getHeight()))/2.0f;
     mStencilGradX  = end_x - mStencilStartX;
     mStencilGradY  = end_y - mStencilStartY;
     mStencilGradN  = mStencilGradX*mStencilGradX + mStencilGradY*mStencilGradY;
@@ -573,11 +573,11 @@ void LLImageFilter::setStencil(EStencilShape shape, EStencilBlendMode mode, F32 
 
 F32 LLImageFilter::getStencilAlpha(S32 i, S32 j)
 {
-    F32 alpha = 1.0;    // That init actually takes care of the STENCIL_SHAPE_UNIFORM case...
+    F32 alpha = 1.0f;    // That init actually takes care of the STENCIL_SHAPE_UNIFORM case...
     if (mStencilShape == STENCIL_SHAPE_VIGNETTE)
     {
         // alpha is a modified gaussian value, with a center and fading in a circular pattern toward the edges
-        // The gamma parameter controls the intensity of the drop down from alpha 1.0 (center) to 0.0
+        // The gamma parameter controls the intensity of the drop down from alpha 1.0 (center) to 0.0f
         F32 d_center_square = (i - mStencilCenterX)*(i - mStencilCenterX) + (j - mStencilCenterY)*(j - mStencilCenterY);
         alpha = powf(F_E, -(powf((d_center_square/(mStencilWidth*mStencilWidth)),mStencilGamma)/2.0f));
     }
@@ -585,7 +585,7 @@ F32 LLImageFilter::getStencilAlpha(S32 i, S32 j)
     {
         // alpha varies according to a squared sine function.
         F32 d = mStencilSine*i - mStencilCosine*j;
-        alpha = (sinf(2*F_PI*d/mStencilWavelength) > 0.0 ? 1.0 : 0.0);
+        alpha = (sinf(2*F_PI*d/mStencilWavelength) > 0.0f ? 1.0f : 0.0f);
     }
     else if (mStencilShape == STENCIL_SHAPE_GRADIENT)
     {
@@ -665,7 +665,7 @@ void LLImageFilter::computeHistograms()
 void LLImageFilter::filterGrayScale()
 {
     LLMatrix3 gray_scale;
-    LLVector3 luminosity(0.2125, 0.7154, 0.0721);
+    LLVector3 luminosity(0.2125f, 0.7154f, 0.0721f);
     gray_scale.setRows(luminosity, luminosity, luminosity);
     gray_scale.transpose();
     colorTransform(gray_scale);
@@ -674,9 +674,9 @@ void LLImageFilter::filterGrayScale()
 void LLImageFilter::filterSepia()
 {
     LLMatrix3 sepia;
-    sepia.setRows(LLVector3(0.3588, 0.7044, 0.1368),
-                  LLVector3(0.2990, 0.5870, 0.1140),
-                  LLVector3(0.2392, 0.4696, 0.0912));
+    sepia.setRows(LLVector3(0.3588f, 0.7044f, 0.1368f),
+                  LLVector3(0.2990f, 0.5870f, 0.1140f),
+                  LLVector3(0.2392f, 0.4696f, 0.0912f));
     sepia.transpose();
     colorTransform(sepia);
 }
@@ -688,15 +688,15 @@ void LLImageFilter::filterSaturate(F32 saturation)
     LLMatrix3 r_b;
     
     // 45 degre rotation around z
-    r_a.setRows(LLVector3( OO_SQRT2,  OO_SQRT2, 0.0),
-                LLVector3(-OO_SQRT2,  OO_SQRT2, 0.0),
-                LLVector3( 0.0,       0.0,      1.0));
+    r_a.setRows(LLVector3( OO_SQRT2,  OO_SQRT2, 0.0f),
+                LLVector3(-OO_SQRT2,  OO_SQRT2, 0.0f),
+                LLVector3( 0.0f,       0.0f,      1.0f));
     // 54.73 degre rotation around y
     float oo_sqrt3 = 1.0f / F_SQRT3;
     float sin_54 = F_SQRT2 * oo_sqrt3;
-    r_b.setRows(LLVector3(oo_sqrt3, 0.0, -sin_54),
-                LLVector3(0.0,      1.0,  0.0),
-                LLVector3(sin_54,   0.0,  oo_sqrt3));
+    r_b.setRows(LLVector3(oo_sqrt3, 0.0f, -sin_54),
+                LLVector3(0.0f,      1.0f,  0.0f),
+                LLVector3(sin_54,   0.0f,  oo_sqrt3));
     
     // Coordinate conversion
     LLMatrix3 Lij = r_b * r_a;
@@ -705,9 +705,9 @@ void LLImageFilter::filterSaturate(F32 saturation)
     
     // Local saturation transform
     LLMatrix3 s;
-    s.setRows(LLVector3(saturation, 0.0,  0.0),
-              LLVector3(0.0,  saturation, 0.0),
-              LLVector3(0.0,        0.0,  1.0));
+    s.setRows(LLVector3(saturation, 0.0f,  0.0f),
+              LLVector3(0.0f,  saturation, 0.0f),
+              LLVector3(0.0f,        0.0f,  1.0f));
     
     // Global saturation transform
     LLMatrix3 transfo = Lij_inv * s * Lij;
@@ -721,15 +721,15 @@ void LLImageFilter::filterRotate(F32 angle)
     LLMatrix3 r_b;
     
     // 45 degre rotation around z
-    r_a.setRows(LLVector3( OO_SQRT2,  OO_SQRT2, 0.0),
-                LLVector3(-OO_SQRT2,  OO_SQRT2, 0.0),
-                LLVector3( 0.0,       0.0,      1.0));
+    r_a.setRows(LLVector3( OO_SQRT2,  OO_SQRT2, 0.0f),
+                LLVector3(-OO_SQRT2,  OO_SQRT2, 0.0f),
+                LLVector3( 0.0f,       0.0f,      1.0f));
     // 54.73 degre rotation around y
     float oo_sqrt3 = 1.0f / F_SQRT3;
     float sin_54 = F_SQRT2 * oo_sqrt3;
-    r_b.setRows(LLVector3(oo_sqrt3, 0.0, -sin_54),
-                LLVector3(0.0,      1.0,  0.0),
-                LLVector3(sin_54,   0.0,  oo_sqrt3));
+    r_b.setRows(LLVector3(oo_sqrt3, 0.0f, -sin_54),
+                LLVector3(0.0f,      1.0f,  0.0f),
+                LLVector3(sin_54,   0.0f,  oo_sqrt3));
     
     // Coordinate conversion
     LLMatrix3 Lij = r_b * r_a;
@@ -739,9 +739,9 @@ void LLImageFilter::filterRotate(F32 angle)
     // Local color rotation transform
     LLMatrix3 r;
     angle *= DEG_TO_RAD;
-    r.setRows(LLVector3( cosf(angle), sinf(angle), 0.0),
-              LLVector3(-sinf(angle), cosf(angle), 0.0),
-              LLVector3( 0.0,         0.0,         1.0));
+    r.setRows(LLVector3( cosf(angle), sinf(angle), 0.0f),
+              LLVector3(-sinf(angle), cosf(angle), 0.0f),
+              LLVector3( 0.0f,         0.0f,         1.0f));
     
     // Global color rotation transform
     LLMatrix3 transfo = Lij_inv * r * Lij;
@@ -756,11 +756,11 @@ void LLImageFilter::filterGamma(F32 gamma, const LLColor3& alpha)
     
     for (S32 i = 0; i < 256; i++)
     {
-        F32 gamma_i = llclampf((float)(powf((float)(i)/255.0,1.0/gamma)));
+        F32 gamma_i = llclampf((float)(powf((float)(i)/255.0f,1.0f/gamma)));
         // Blend in with alpha values
-        gamma_red_lut[i]   = (U8)((1.0 - alpha.mV[0]) * (float)(i) + alpha.mV[0] * 255.0 * gamma_i);
-        gamma_green_lut[i] = (U8)((1.0 - alpha.mV[1]) * (float)(i) + alpha.mV[1] * 255.0 * gamma_i);
-        gamma_blue_lut[i]  = (U8)((1.0 - alpha.mV[2]) * (float)(i) + alpha.mV[2] * 255.0 * gamma_i);
+        gamma_red_lut[i]   = (U8)((1.0f - alpha.mV[0]) * (float)(i) + alpha.mV[0] * 255.0f * gamma_i);
+        gamma_green_lut[i] = (U8)((1.0f - alpha.mV[1]) * (float)(i) + alpha.mV[1] * 255.0f * gamma_i);
+        gamma_blue_lut[i]  = (U8)((1.0f - alpha.mV[2]) * (float)(i) + alpha.mV[2] * 255.0f * gamma_i);
     }
     
     colorCorrect(gamma_red_lut,gamma_green_lut,gamma_blue_lut);
@@ -783,7 +783,7 @@ void LLImageFilter::filterLinearize(F32 tail, const LLColor3& alpha)
     tail = llclampf(tail);
     S32 total = cumulated_histo[255];
     S32 min_c = (S32)((F32)(total) * tail);
-    S32 max_c = (S32)((F32)(total) * (1.0 - tail));
+    S32 max_c = (S32)((F32)(total) * (1.0f - tail));
     
     // Find min and max values
     S32 min_v = 0;
@@ -808,23 +808,23 @@ void LLImageFilter::filterLinearize(F32 tail, const LLColor3& alpha)
         {
             U8 value_i = (i < min_v ? 0 : 255);
             // Blend in with alpha values
-            linear_red_lut[i]   = (U8)((1.0 - alpha.mV[0]) * (float)(i) + alpha.mV[0] * value_i);
-            linear_green_lut[i] = (U8)((1.0 - alpha.mV[1]) * (float)(i) + alpha.mV[1] * value_i);
-            linear_blue_lut[i]  = (U8)((1.0 - alpha.mV[2]) * (float)(i) + alpha.mV[2] * value_i);
+            linear_red_lut[i]   = (U8)((1.0f - alpha.mV[0]) * (float)(i) + alpha.mV[0] * value_i);
+            linear_green_lut[i] = (U8)((1.0f - alpha.mV[1]) * (float)(i) + alpha.mV[1] * value_i);
+            linear_blue_lut[i]  = (U8)((1.0f - alpha.mV[2]) * (float)(i) + alpha.mV[2] * value_i);
         }
     }
     else
     {
         // Linearize between min and max
-        F32 slope = 255.0 / (F32)(max_v - min_v);
+        F32 slope = 255.0f/ (F32)(max_v - min_v);
         F32 translate = -min_v * slope;
         for (S32 i = 0; i < 256; i++)
         {
             U8 value_i = (U8)(llclampb((S32)(slope*i + translate)));
             // Blend in with alpha values
-            linear_red_lut[i]   = (U8)((1.0 - alpha.mV[0]) * (float)(i) + alpha.mV[0] * value_i);
-            linear_green_lut[i] = (U8)((1.0 - alpha.mV[1]) * (float)(i) + alpha.mV[1] * value_i);
-            linear_blue_lut[i]  = (U8)((1.0 - alpha.mV[2]) * (float)(i) + alpha.mV[2] * value_i);
+            linear_red_lut[i]   = (U8)((1.0f - alpha.mV[0]) * (float)(i) + alpha.mV[0] * value_i);
+            linear_green_lut[i] = (U8)((1.0f - alpha.mV[1]) * (float)(i) + alpha.mV[1] * value_i);
+            linear_blue_lut[i]  = (U8)((1.0f - alpha.mV[2]) * (float)(i) + alpha.mV[2] * value_i);
         }
     }
     
@@ -863,9 +863,9 @@ void LLImageFilter::filterEqualize(S32 nb_classes, const LLColor3& alpha)
     for (S32 i = 0; i < 256; i++)
     {
         // Blend in current_value with alpha values
-        equalize_red_lut[i]   = (U8)((1.0 - alpha.mV[0]) * (float)(i) + alpha.mV[0] * current_value);
-        equalize_green_lut[i] = (U8)((1.0 - alpha.mV[1]) * (float)(i) + alpha.mV[1] * current_value);
-        equalize_blue_lut[i]  = (U8)((1.0 - alpha.mV[2]) * (float)(i) + alpha.mV[2] * current_value);
+        equalize_red_lut[i]   = (U8)((1.0f - alpha.mV[0]) * (float)(i) + alpha.mV[0] * current_value);
+        equalize_green_lut[i] = (U8)((1.0f - alpha.mV[1]) * (float)(i) + alpha.mV[1] * current_value);
+        equalize_blue_lut[i]  = (U8)((1.0f - alpha.mV[2]) * (float)(i) + alpha.mV[2] * current_value);
         if (cumulated_histo[i] >= current_count)
         {
             current_count += delta_count;
@@ -884,15 +884,15 @@ void LLImageFilter::filterColorize(const LLColor3& color, const LLColor3& alpha)
     U8 green_lut[256];
     U8 blue_lut[256];
     
-    F32 red_composite   =  255.0 * alpha.mV[0] * color.mV[0];
-    F32 green_composite =  255.0 * alpha.mV[1] * color.mV[1];
-    F32 blue_composite  =  255.0 * alpha.mV[2] * color.mV[2];
+    F32 red_composite   =  255.0f * alpha.mV[0] * color.mV[0];
+    F32 green_composite =  255.0f * alpha.mV[1] * color.mV[1];
+    F32 blue_composite  =  255.0f * alpha.mV[2] * color.mV[2];
     
     for (S32 i = 0; i < 256; i++)
     {
-        red_lut[i]   = (U8)(llclampb((S32)((1.0 - alpha.mV[0]) * (F32)(i) + red_composite)));
-        green_lut[i] = (U8)(llclampb((S32)((1.0 - alpha.mV[1]) * (F32)(i) + green_composite)));
-        blue_lut[i]  = (U8)(llclampb((S32)((1.0 - alpha.mV[2]) * (F32)(i) + blue_composite)));
+        red_lut[i]   = (U8)(llclampb((S32)((1.0f - alpha.mV[0]) * (F32)(i) + red_composite)));
+        green_lut[i] = (U8)(llclampb((S32)((1.0f - alpha.mV[1]) * (F32)(i) + green_composite)));
+        blue_lut[i]  = (U8)(llclampb((S32)((1.0f - alpha.mV[2]) * (F32)(i) + blue_composite)));
     }
     
     colorCorrect(red_lut,green_lut,blue_lut);
@@ -904,15 +904,15 @@ void LLImageFilter::filterContrast(F32 slope, const LLColor3& alpha)
     U8 contrast_green_lut[256];
     U8 contrast_blue_lut[256];
     
-    F32 translate = 128.0 * (1.0 - slope);
+    F32 translate = 128.0f * (1.0f - slope);
     
     for (S32 i = 0; i < 256; i++)
     {
         U8 value_i = (U8)(llclampb((S32)(slope*i + translate)));
         // Blend in with alpha values
-        contrast_red_lut[i]   = (U8)((1.0 - alpha.mV[0]) * (float)(i) + alpha.mV[0] * value_i);
-        contrast_green_lut[i] = (U8)((1.0 - alpha.mV[1]) * (float)(i) + alpha.mV[1] * value_i);
-        contrast_blue_lut[i]  = (U8)((1.0 - alpha.mV[2]) * (float)(i) + alpha.mV[2] * value_i);
+        contrast_red_lut[i]   = (U8)((1.0f - alpha.mV[0]) * (float)(i) + alpha.mV[0] * value_i);
+        contrast_green_lut[i] = (U8)((1.0f - alpha.mV[1]) * (float)(i) + alpha.mV[1] * value_i);
+        contrast_blue_lut[i]  = (U8)((1.0f - alpha.mV[2]) * (float)(i) + alpha.mV[2] * value_i);
     }
     
     colorCorrect(contrast_red_lut,contrast_green_lut,contrast_blue_lut);
@@ -930,9 +930,9 @@ void LLImageFilter::filterBrightness(F32 add, const LLColor3& alpha)
     {
         U8 value_i = (U8)(llclampb(i + add_value));
         // Blend in with alpha values
-        brightness_red_lut[i]   = (U8)((1.0 - alpha.mV[0]) * (float)(i) + alpha.mV[0] * value_i);
-        brightness_green_lut[i] = (U8)((1.0 - alpha.mV[1]) * (float)(i) + alpha.mV[1] * value_i);
-        brightness_blue_lut[i]  = (U8)((1.0 - alpha.mV[2]) * (float)(i) + alpha.mV[2] * value_i);
+        brightness_red_lut[i]   = (U8)((1.0f - alpha.mV[0]) * (float)(i) + alpha.mV[0] * value_i);
+        brightness_green_lut[i] = (U8)((1.0f - alpha.mV[1]) * (float)(i) + alpha.mV[1] * value_i);
+        brightness_blue_lut[i]  = (U8)((1.0f - alpha.mV[2]) * (float)(i) + alpha.mV[2] * value_i);
     }
     
     colorCorrect(brightness_red_lut,brightness_green_lut,brightness_blue_lut);

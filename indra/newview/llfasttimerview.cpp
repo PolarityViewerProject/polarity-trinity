@@ -1040,7 +1040,7 @@ void LLFastTimerView::drawLineGraph()
 	LLLocalClipRect clip(mGraphRect);
 
 	//normalize based on last frame's maximum
-	static F32Seconds max_time(0.000001);
+	static F32Seconds max_time(0.000001f);
 	static U32 max_calls = 0;
 	static F32 alpha_interp = 0.f;
 
@@ -1062,7 +1062,7 @@ void LLFastTimerView::drawLineGraph()
 			S32 bar_frame = first_frame - (mScrollIndex + mHoverBarIndex) - 1;
 			F32 bar = (F32) mGraphRect.mLeft + frame_delta*bar_frame;
 
-			gGL.color4f(0.5f,0.5f,0.5f,1);
+			gGL.color4f(0.5f,0.5f,0.5f,1.0f);
 
 			gGL.begin(LLRender::LINES);
 			gGL.vertex2i((S32)bar, mGraphRect.mBottom);
