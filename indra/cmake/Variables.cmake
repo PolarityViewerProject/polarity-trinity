@@ -25,6 +25,7 @@ set(INTEGRATION_TESTS_PREFIX)
 option(LL_TESTS "Build and run unit and integration tests (disable for build timing runs to reduce variation" OFF)
 
 # Compiler and toolchain options
+set(COMPILER_JOBS "" CACHE STRING "Amount of simultaneous compiler jobs")
 option(USESYSTEMLIBS "Use libraries from your system rather than Linden-supplied prebuilt libraries." OFF)
 option(INCREMENTAL_LINK "Use incremental linking on win32 builds (enable for faster links on some machines)" OFF)
 option(USE_PRECOMPILED_HEADERS "Enable use of precompiled header directives where supported." ON)
