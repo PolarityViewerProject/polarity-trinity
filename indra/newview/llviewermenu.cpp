@@ -7269,13 +7269,13 @@ class LLAdvancedClickRenderProfile: public view_listener_t
 	}
 };
 
-F32 gpu_benchmark();
+F32 gpu_benchmark(bool force_run);
 
 class LLAdvancedClickRenderBenchmark: public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		gpu_benchmark();
+		gpu_benchmark(true);
 		return true;
 	}
 };

@@ -873,8 +873,24 @@ void LLViewerObjectList::renderObjectBeacons()
 }
 
 
-F32 gpu_benchmark()
+F32 gpu_benchmark(bool force_run)
 {
+
+	// <polarity> save GPU benchmark result and re-use it when possible
+	S32 saved_bench = gSavedSettings.getF32("PolarityLastGPUBenchmarkResult");
+	if(saved_bench > 0 && !force_run)
+	{
+		LL_INFOS() << "Skipping GPU Benchmark and returning previous result due to user preference" << LL_ENDL;
+		return saved_bench;
+	}
+	// <polarity> Don't run GPU benchmark on Intel graphics, they take too long to run (0.117834GB/sec / 11.225GB/sec )
+	if (gGLManager.mIsIntel)
+	{
+		LL_INFOS() << "Skipping GPU Benchmark on Intel graphics" << LL_ENDL;
+		gSavedSettings.setF32("PolarityLastGPUBenchmarkResult", (F32)11.225f);
+		return 11.225f;
+	}
+	// </polarity>
 	if (!gGLManager.mHasVertexBufferObject || !gGLManager.mHasShaderObjects || !gGLManager.mHasTimerQuery)
 	{ // don't bother benchmarking the fixed function or without vbos
       // or venerable drivers which don't support accurate timing anyway
@@ -1080,6 +1096,9 @@ F32 gpu_benchmark()
 
 	LL_INFOS() << "Memory bandwidth is " << llformat("%.3f", gbps) << "GB/sec according to ARB_timer_query" << LL_ENDL;
 
+	// <polarity> save GPU benchmark result and re-use it when possible
+	gSavedSettings.setF32("PolarityLastGPUBenchmarkResult", (F32)gbps);
+	// </polarity>
 	return gbps;
 }
 

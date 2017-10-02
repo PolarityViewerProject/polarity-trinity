@@ -24,6 +24,17 @@
       <key>Value</key>
       <real>60</real>
     </map>
+    <key>PolarityLastGPUBenchmarkResult</key>
+    <map>
+      <key>Comment</key>
+      <string>GPU Memory bandwidth from the last benchmark run</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <string>20</string>
+    </map>
     <key>PolarityLoggingLevel</key>
     <map>
       <key>Comment</key>

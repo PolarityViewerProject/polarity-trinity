@@ -392,12 +392,12 @@ bool LLFeatureManager::parseFeatureTable(std::string filename)
 	return parse_ok;
 }
 
-F32 gpu_benchmark();
+F32 gpu_benchmark(bool force_run);
 
 bool LLFeatureManager::loadGPUClass()
 {
 	//get memory bandwidth from benchmark
-	F32 gbps = gpu_benchmark();
+	F32 gbps = gpu_benchmark(false); // <polarity/>
 
 	if (gbps < 0.f)
 	{ //couldn't bench, use GLVersion
