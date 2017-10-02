@@ -40,6 +40,30 @@ elseif((USE_ASAN OR USE_LEAKSAN) AND USE_THDSAN)
   message(FATAL_ERROR "Address and Leak sanitizers are incompatible with thread sanitizer")
 endif(USE_ASAN AND USE_LEAKSAN)
 
+#==============================
+# Possible values:
+# WARNING: Anything below SSE3 in this list may not work on AMD CPUs
+# PURE        # Everything
+# SSE2        # You need SSE2 to run the viewer anyway.
+# SSE3        # Intel Core, AMD Phenom
+# SSSE3       # Intel Core, AMD FX
+# SSE41       # Intel Core i, AMD FX
+# SSE42       # Intel Core i, AMD FX
+# AVX         # Intel Core i-2xxx, AMD FX
+# AVX2        # Intel Core i-3-4xxx, AMD Ryzen (Can be slower than AVX1 on Ryzen)
+# AVX512      # Intel Skylake
+#
+# The default is empty/not defined, which is "any relevant"
+set(GLM_FORCE_ARCH "")
+if(GLM_FORCE_ARCH STREQUAL "")
+set(GLM_FORCE_ARCH "")
+message("GLM Instruction set: Automatic")
+else()
+message("GLM Instruction set: ${GLM_FORCE_ARCH}")
+set(GLM_FORCE_ARCH "/DGLM_FORCE_ARCH=${GLM_FORCE_ARCH}")
+endif()
+#==============================
+
 option(UNATTENDED "Disable use of uneeded tooling for automated builds" OFF)
 
 # Media Plugins

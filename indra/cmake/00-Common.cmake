@@ -88,6 +88,7 @@ if (WINDOWS)
       /D_CRT_SECURE_NO_WARNINGS
 	  /D_CRT_NONSTDC_NO_DEPRECATE
       /D_WINSOCK_DEPRECATED_NO_WARNINGS
+      ${GLM_FORCE_ARCH}
       )
 
   add_compile_options(
