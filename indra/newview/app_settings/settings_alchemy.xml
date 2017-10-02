@@ -1162,7 +1162,7 @@
       <key>Value</key>
       <integer>12</integer>
     </map>
-    <key>RenderDeferredSSR</key>
+<!--     <key>RenderDeferredSSR</key>
     <map>
       <key>Comment</key>
       <string>Execute screen space reflection shader permutation in deferred renderer.</string>
@@ -1172,7 +1172,7 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
+    </map> -->
     <key>RenderDeferredSSAOResolutionScale</key>
     <map>
       <key>Comment</key>
