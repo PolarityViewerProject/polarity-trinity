@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """\
 @file viewer_manifest.py
 @author Ryan Williams
@@ -35,16 +36,19 @@ import re
 import tarfile
 import time
 import random
+import datetime # for utcnow
 viewer_dir = os.path.dirname(__file__)
 # Add indra/lib/python to our path so we don't have to muck with PYTHONPATH.
 # Put it FIRST because some of our build hosts have an ancient install of
 # indra.util.llmanifest under their system Python!
 sys.path.insert(0, os.path.join(viewer_dir, os.pardir, "lib", "python"))
-from indra.util.llmanifest import LLManifest, main, path_ancestors, CHANNEL_VENDOR_BASE, RELEASE_CHANNEL, ManifestError
+from indra.util.llmanifest import LLManifest, main, proper_windows_path, path_ancestors, CHANNEL_VENDOR_BASE, RELEASE_CHANNEL, ManifestError
 try:
     from llbase import llsd
 except ImportError:
     from indra.base import llsd
+
+build_number = os.getenv('BUILD_NUMBER', "{:%Y%m%d%H%M%S}".format(datetime.datetime.utcnow()))
 
 class ViewerManifest(LLManifest):
     def is_packaging_viewer(self):
@@ -55,38 +59,66 @@ class ViewerManifest(LLManifest):
         # and copy_l_viewer_manifest targets)
         return 'package' in self.args['actions']
 
+    def channel_type(self): # returns 'release', 'beta', 'project', or 'test'
+        global CHANNEL_VENDOR_BASE
+        channel_qualifier=self.channel().replace(CHANNEL_VENDOR_BASE, "").lower().strip()
+        if channel_qualifier.startswith('release'):
+            channel_type='release'
+        elif channel_qualifier.startswith('beta'):
+            channel_type='beta'
+        elif channel_qualifier.startswith('project'):
+            channel_type='project'
+        else:
+            channel_type='test'
+        return channel_type
     def construct(self):
         super(ViewerManifest, self).construct()
         self.path(src="../../scripts/messages/message_template.msg", dst="app_settings/message_template.msg")
         self.path(src="../../etc/message.xml", dst="app_settings/message.xml")
 
-        if self.is_packaging_viewer():
-            if self.prefix(src="app_settings"):
-                self.exclude("logcontrol.xml")
-                self.exclude("logcontrol-dev.xml")
-                self.path("*.pem")
-                self.path("*.ini")
-                self.path("*.xml")
-                self.path("*.db2")
+        # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
+        if self.prefix(src="app_settings"):
+            # ... and the included spell checking dictionaries
+            pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+            if self.prefix(src=pkgdir,dst=""):
+                self.path("dictionaries")
+                self.end_prefix(pkgdir)
+            self.end_prefix("app_settings")
+        # </FS:LO>
 
-                # include the entire shaders directory recursively
-                self.path("shaders")
-                # include the extracted list of contributors
-                contributions_path = "../../doc/contributions.txt"
-                contributor_names = self.extract_names(contributions_path)
-                self.put_in_file(contributor_names, "contributors.txt", src=contributions_path)
+        if self.prefix(src="app_settings"):
+            self.exclude("logcontrol.xml")
+            self.exclude("logcontrol-dev.xml")
+            self.path("*.pem")
+            self.path("*.ini")
+            self.path("*.xml")
+            self.path("*.db2")
 
-                # ... and the entire windlight directory
-                self.path("windlight")
+            # include the entire shaders directory recursively
+            self.path("shaders")
+            # include the extracted list of contributors
+            contributions_path = "../../doc/contributions.txt"
+            contributor_names = self.extract_names(contributions_path)
+            self.put_in_file(contributor_names, "contributors.txt", src=contributions_path)
 
-                # ... and the entire image filters directory
-                self.path("filters")
+            # include the extracted list of special thanks
+            special_thanks_path = "../../doc/polarity_credits.txt"
+            special_thanks_names = self.extract_names(special_thanks_path)
+            self.put_in_file(special_thanks_names, "polarity_credits.txt", src=special_thanks_path)
 
-                # ... and the included spell checking dictionaries
-                pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
-                if self.prefix(src=pkgdir,dst=""):
-                    self.path("dictionaries")
-                    self.end_prefix(pkgdir)
+            # TODO: Add changelog?
+
+            # ... and the entire windlight directory
+            self.path("windlight")
+
+            # ... and the entire image filters directory
+            self.path("filters")
+
+            # ... and the included spell checking dictionaries
+            pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+            if self.prefix(src=pkgdir,dst=""):
+                self.path("dictionaries")
+                self.end_prefix(pkgdir)
 
                 # include the extracted packages information (see BuildPackagesInfo.cmake)
                 self.path(src=os.path.join(self.args['build'],"packages-info.txt"), dst="packages-info.txt")
@@ -138,15 +170,22 @@ class ViewerManifest(LLManifest):
                 self.end_prefix("character")
 
             # Include our fonts
-            pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
-            if self.prefix(src=pkgdir,dst=""):
-                self.path("fonts")
-                self.end_prefix(pkgdir)
+            if self.prefix(src="fonts"):
+                self.path("*.ttf")
+                self.path("*.txt")
+                self.end_prefix("fonts")
 
             # skins
-            if self.prefix(src="skins"):
+            if self.prefix(src="skins/default"):
+                self.path("colors.xml")
+                # <polarity> automatically copy the right vendor icon from the icons folder
+                try:
+                    self.path(src="../icons/%s/secondlife_16.png" % self.channel_type(), dst="default/textures/icons/SL_Logo.png")
+                except IOError:
+                    print "There was a problem finding the channel icon. Using default instead"
+
                 # include the entire textures directory recursively
-                if self.prefix(src="*/textures"):
+                if self.prefix(src="textures"):
                     self.path("*/*.tga")
                     self.path("*/*.j2c")
                     self.path("*/*.jpg")
@@ -155,15 +194,63 @@ class ViewerManifest(LLManifest):
                     self.path("*.j2c")
                     self.path("*.jpg")
                     self.path("*.png")
+                    # <polarity> url icons subfolder
+                    self.path("icons/*/*.png")
                     self.path("textures.xml")
-                    self.end_prefix("*/textures")
-                self.path("*/xui/*/*.xml")
-                self.path("*/xui/*/widgets/*.xml")
-                self.path("*/*.xml")
-                self.path("*/*.ini")
-                self.path("*/*.json")
+                    self.end_prefix("textures")
 
-                self.end_prefix("skins")
+                # <polarity> Do not pack unsupported/unmaintained languages.
+                # Please contribute your translations to the source code to see your language included.
+                # self.path("*/xui/*/*.xml")
+                supported_languages = ["en","fr"];
+                for index, language in enumerate(supported_languages):
+                    lang = ("xui/%s" % language)
+                    if self.prefix(src=lang):
+                        print "Including XML for language '%s'" % language
+                        self.path("*.xml")
+                        self.path("widgets/*.xml")
+
+                    self.end_prefix(lang)
+
+                self.end_prefix("skins/default")
+
+            if self.prefix(src="skins/polarity"):
+                self.path("colors.xml")
+                # <polarity> automatically copy the right vendor icon from the icons folder
+                try:
+                    self.path(src="../icons/%s/secondlife_16.png" % self.channel_type(), dst="default/textures/icons/SL_Logo.png")
+                except IOError:
+                    print "There was a problem finding the channel icon. Using default instead"
+
+                # include the entire textures directory recursively
+                if self.prefix(src="textures"):
+                    self.path("*/*.tga")
+                    self.path("*/*.j2c")
+                    self.path("*/*.jpg")
+                    self.path("*/*.png")
+                    self.path("*.tga")
+                    self.path("*.j2c")
+                    self.path("*.jpg")
+                    self.path("*.png")
+                    # <polarity> url icons subfolder
+                    self.path("icons/*/*.png")
+                    self.path("textures.xml")
+                    self.end_prefix("textures")
+
+                # <polarity> Do not pack unsupported/unmaintained languages.
+                # Please contribute your translations to the source code to see your language included.
+                # self.path("*/xui/*/*.xml")
+                supported_languages = ["en","fr"];
+                for index, language in enumerate(supported_languages):
+                    lang = ("xui/%s" % language)
+                    if self.prefix(src=lang):
+                        print "Including XML for language '%s'" % language
+                        self.path("*.xml")
+                        self.path("widgets/*.xml")
+
+                    self.end_prefix(lang)
+
+                self.end_prefix("skins/polarity")                
 
             # local_assets dir (for pre-cached textures)
             if self.prefix(src="local_assets"):
@@ -172,7 +259,7 @@ class ViewerManifest(LLManifest):
                 self.end_prefix("local_assets")
 
             # File in the newview/ directory
-            self.path("gpu_table.txt")
+            # self.path("gpu_table.txt")
 
             #summary.json.  Standard with exception handling is fine.  If we can't open a new file for writing, we have worse problems
             summary_dict = {"Type":"viewer","Version":'.'.join(self.args['version']),"Channel":self.channel_with_pkg_suffix()}
@@ -231,12 +318,19 @@ class ViewerManifest(LLManifest):
         global CHANNEL_VENDOR_BASE
         # a standard map of strings for replacing in the templates
         substitution_strings = {
-            'channel_vendor_base' : '_'.join(CHANNEL_VENDOR_BASE.split()),
+            'channel_vendor_base' : '-'.join(CHANNEL_VENDOR_BASE.split()),
             'channel_variant_underscores':self.channel_variant_app_suffix(),
             'version_underscores' : '_'.join(self.args['version']),
-            'arch':self.args['arch']
+            'arch' : self.args['arch'],
+            'utcdate' : ''.join(str(build_number))
             }
-        return "%(channel_vendor_base)s%(channel_variant_underscores)s_%(version_underscores)s_%(arch)s" % substitution_strings
+        channel_type=self.channel_type()
+        installer_file_name=""
+        if channel_type == 'release':
+            installer_file_name="%(channel_vendor_base)s%(channel_variant_underscores)s_%(version_underscores)s_%(arch)s"
+        else:
+            installer_file_name="%(channel_vendor_base)s%(channel_variant_underscores)s_%(version_underscores)s_%(arch)s_%(utcdate)s"
+        return installer_file_name % substitution_strings
 
     def app_name(self):
         global CHANNEL_VENDOR_BASE
@@ -272,8 +366,8 @@ class ViewerManifest(LLManifest):
         for line in lines :
             if re.match("\S", line) :
                 names.append(line.rstrip())
-        # It's not fair to always put the same people at the head of the list
-        random.shuffle(names)
+        # Sort names in alphabetical order
+        names.sort()
         return ', '.join(names)
 
 class WindowsManifest(ViewerManifest):
@@ -366,7 +460,7 @@ class WindowsManifest(ViewerManifest):
                     self.path('tbbmalloc.dll')
                     self.path('tbbmalloc_proxy.dll')
             except:
-                print "Skipping tbbmalloc.dll"
+                print "Skipping tbbmalloc dlls"
 
             self.end_prefix()
 
@@ -562,6 +656,7 @@ class WindowsManifest(ViewerManifest):
             'final_exe' : self.final_exe(),
             'flags':'',
             'app_name':self.app_name(),
+            'channel':self.channel_type(),
             'app_name_oneword':self.app_name_oneword()
             }
 
@@ -601,17 +696,21 @@ class WindowsManifest(ViewerManifest):
         # We use the Unicode version of NSIS, available from
         # http://www.scratchpaper.com/
         # Check two paths, one for Program Files, and one for Program Files (x86).
-        # Yay 64bit windows.
-        NSIS_path = os.path.expandvars('${ProgramFiles}\\NSIS\\makensis.exe')
+        # Yay 64bit windows and python.
+        NSIS_path = os.path.expandvars('${ProgramFiles(x86)}\\NSIS\\Unicode\\makensis.exe')
         if not os.path.exists(NSIS_path):
-            NSIS_path = os.path.expandvars('${ProgramFiles(x86)}\\NSIS\\makensis.exe')
+            NSIS_path = os.path.expandvars('${ProgramFiles}\\NSIS\\Unicode\\makensis.exe')
+            if not os.path.exists(NSIS_path):
+                print >> sys.stderr, "NSIS was never found. Installer not created."
         installer_created=False
         nsis_attempts=3
-        nsis_retry_wait=15
+        nsis_retry_wait=2
         while (not installer_created) and (nsis_attempts > 0):
             try:
                 nsis_attempts-=1;
-                self.run_command('"' + NSIS_path + '" ' + self.dst_path_of(tempfile))
+                # Make NSIS quiet
+                # self.run_command('"' + NSIS_path + '" ' + self.dst_path_of(tempfile))
+                self.run_command('"' + NSIS_path + '" /V1 ' + self.dst_path_of(tempfile))
                 installer_created=True # if no exception was raised, the codesign worked
             except ManifestError, err:
                 if nsis_attempts:
@@ -621,15 +720,36 @@ class WindowsManifest(ViewerManifest):
                 else:
                     print >> sys.stderr, "Maximum nsis attempts exceeded; giving up"
                     raise
-        # self.remove(self.dst_path_of(tempfile))
-        if 'signature' in self.args and 'VIEWER_SIGNING_PWD' in os.environ:
+        # Compress the symbols with WinRAR
+        Winrar_path = os.path.expandvars('${ProgramFiles}\\WinRAR\\Rar.exe') # 64-bit winrar on 64-bit python
+        if not os.path.exists(Winrar_path):
+            print "WARNING: 32bit python or Windows detected; please install 64bit python instead for a smoother experience"
+            sys.stdout.flush()
+            Winrar_path = os.path.expandvars('${ProgramW6432}\\WinRAR\\Rar.exe') # 64-bit Winrar on 32-bit python
+            if not os.path.exists(Winrar_path):
+                Winrar_path = os.path.expandvars('${ProgramFiles(x86)}\\WinRAR\\Rar.exe') # 32-bit winrar on 32-bit python
+                if not os.path.exists(Winrar_path):
+                    print >> sys.stderr,"WinRAR was never found. Symbols not compressed."
+        archive_created=False
+        rar_attempts=3
+        rar_retry_wait=2
+        while (not archive_created) and (rar_attempts > 0):
             try:
-                self.sign(self.args['configuration'] + "\\" + substitution_strings['installer_file'])
-            except: 
-                print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration'] + "\\" + substitution_strings['installer_file']
-
+                rar_attempts-=1;
+                self.run_command("\"%s\" %s \"%s%s.rar\" \"%s\"" % (Winrar_path, 'a -cfg- -htb -idcd -ma5 -md1024m -mt8 -oi- -s -t -m5 -r -ep1 --',self.dst_path_of("Symbols-"), build_number, self.dst_path_of("polarity-bin.pdb")))
+                archive_created=True
+            except ManifestError, err:
+                if rar_attempts:
+                    print >> sys.stderr, "WinRAR failed, waiting %d seconds before retrying" % rar_retry_wait
+                    time.sleep(rar_retry_wait)
+                    rar_retry_wait*=2
+                else:
+                    print >> sys.stderr, "Maximum WinRAR attempts exceeded; giving up"
+                    # raise
         self.created_path(self.dst_path_of(installer_file))
         self.package_file = installer_file
+        # Darl wanted this.
+        self.path(self.dst_path_of(installer_file), "Polarity_Latest.exe")
 
 
 class Windows_i686_Manifest(WindowsManifest):
@@ -844,7 +964,7 @@ class DarwinManifest(ViewerManifest):
 
                     self.end_prefix()
 
-                # SLPlugin plugins
+                # PolarityPlugin plugins
                 if self.prefix(src="", dst="llplugin"):
                     self.path2basename("../media_plugins/cef/" + self.args['configuration'],
                                        "media_plugin_cef.dylib")
@@ -852,7 +972,7 @@ class DarwinManifest(ViewerManifest):
 
                 self.end_prefix("Resources")
 
-                # CEF framework goes inside Second Life.app/Contents/Frameworks
+                # CEF framework goes inside Polarity.app/Contents/Frameworks
                 if self.prefix(src="", dst="Frameworks"):
                     frameworkfile="Chromium Embedded Framework.framework"
                     self.path2basename(relpkgdir, frameworkfile)
@@ -861,7 +981,7 @@ class DarwinManifest(ViewerManifest):
                 # This code constructs a relative path from the
                 # target framework folder back to the location of the symlink.
                 # It needs to be relative so that the symlink still works when
-                # (as is normal) the user moves the app bunlde out of the DMG
+                # (as is normal) the user moves the app bundle out of the DMG
                 # and into the /Applications folder. Note we also call 'raise'
                 # to terminate the process if we get an error since without
                 # this symlink, Second Life web media can't possibly work.
