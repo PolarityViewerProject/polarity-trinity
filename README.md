@@ -1,7 +1,9 @@
-![Alchemy Logo](http://2.bp.blogspot.com/-NWf0umfCazg/U_HEfrzkWGI/AAAAAAAAAeM/vtBxnNqFevw/s1600/Banner_New.png)
-## Resources
-* [Alchemy Website](http://www.alchemyviewer.org)
-* [Issue Tracker](http://alchemy.atlassian.net/)
-* [Wiki](https://alchemy.atlassian.net/wiki/)
-## Code Status
-![Coverity Scan Build Status](https://scan.coverity.com/projects/1904/badge.svg)
+![Polarity Viewer](indra/newview/icons/release/secondlife_128.png)
+
+This repository contains the source code for the **Polarity Viewer**, a virtual world client compatible with the Second Life protocol.
+
+[Website](https://www.polarityviewer.org)
+
+[Issue Tracker](https://polarityviewer.atlassian.net/)
+
+To download the current default version, visit [the download page](https://www.polarityviewer.org/download/).
