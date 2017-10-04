@@ -32,7 +32,7 @@ import Tkinter, tkMessageBox
 
 TITLE = "Polarity Viewer Updater"
 # Magic bundle identifier used by all Polarity viewer bundles
-BUNDLE_IDENTIFIER = "org.alchemyviewer.viewer"
+BUNDLE_IDENTIFIER = "org.polarityviewer.viewer"
 # Magic OS directory name that causes Cocoa viewer to crash on OS X 10.7.5
 # (see MAINT-3331)
 STATE_DIR = os.path.join(
@@ -91,7 +91,7 @@ def fail(message):
     tkMessageBox.showerror(TITLE,
 """An error occurred while updating Polarity:
 %s
-Please download the latest viewer from www.alchemyviewer.org.""" % message,
+Please download the latest viewer from www.polarityviewer.org.""" % message,
                            icon=tkMessageBox.WARNING)
     sys.exit(1)
 

@@ -187,7 +187,7 @@ No tutorial is currently available.
    icon="alertmodal.tga"
    name="BadInstallation"
    type="alertmodal">
- An error occurred while updating [APP_NAME].  Please [https://www.alchemyviewer.org download the latest version] of the viewer.
+ An error occurred while updating [APP_NAME].  Please [https://www.polarityviewer.org download the latest version] of the viewer.
     <tag>fail</tag>
     <usetemplate
      name="okbutton"
@@ -3999,7 +3999,7 @@ Download to your Applications folder?
    type="alertmodal">
     An error occurred installing the viewer update.
     Please download and install the latest viewer from
-    https://www.alchemyviewer.org
+    https://www.polarityviewer.org
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -4013,7 +4013,7 @@ Download to your Applications folder?
     You will be unable to log in until [APP_NAME] has been updated.
 
     Please download and install the latest viewer from
-    https://www.alchemyviewer.org
+    https://www.polarityviewer.org
     <tag>fail</tag>
     <usetemplate
      name="okbutton"
@@ -4026,7 +4026,7 @@ Download to your Applications folder?
    type="alertmodal">
 There is a required update for your viewer installation.
 
-You may download this update from https://alchemyviewer.org/
+You may download this update from https://polarityviewer.org/
 or you can install it now.
     <tag>confirm</tag>
     <usetemplate
